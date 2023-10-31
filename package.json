@@ -17,7 +17,7 @@
     "@octokit/graphql": "^7.0.2",
     "@octokit/plugin-paginate-graphql": "^4.0.0",
     "chalk": "^5.3.0",
-    "commander": "^11.0.0",
+    "commander": "^11.1.0",
     "csv-stringify": "^6.4.4",
     "octokit": "^3.1.1",
     "undici": "^5.26.0",
