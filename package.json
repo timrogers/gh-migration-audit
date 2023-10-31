@@ -20,7 +20,7 @@
     "commander": "^11.0.0",
     "csv-stringify": "^6.4.4",
     "octokit": "^3.1.1",
-    "undici": "^5.26.0",
+    "undici": "^5.27.0",
     "winston": "^3.11.0"
   },
   "devDependencies": {
