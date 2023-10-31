@@ -1,0 +1,45 @@
+{
+  "name": "gh-migration-audit",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Audits GitHub repositories to highlight data that cannot be automatically migrated using GitHub's migration tools",
+  "homepage": "https://github.com/timrogers/gh-migration-audit",
+  "scripts": {
+    "package": "node build.js && npx pkg dist/migration-audit.cjs --out-path bin",
+    "lint": "eslint . --ext .ts",
+    "lint-and-fix": "eslint . --ext .ts --fix",
+    "dev": "npx ts-node --esm src/index.ts",
+    "test": "jest"
+  },
+  "author": "Tim Rogers <me@timrogers.co.uk>",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/graphql": "^7.0.2",
+    "@octokit/plugin-paginate-graphql": "^4.0.0",
+    "chalk": "^5.3.0",
+    "commander": "^11.0.0",
+    "csv-stringify": "^6.4.4",
+    "octokit": "^3.1.1",
+    "undici": "^5.26.0",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.7",
+    "@typescript-eslint/eslint-plugin": "^6.7.5",
+    "@typescript-eslint/parser": "^6.7.5",
+    "esbuild": "^0.19.4",
+    "eslint": "^8.51.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "jest": "^29.7.0",
+    "pkg": "^5.8.1",
+    "prettier": "^3.0.3",
+    "ts-jest": "^29.1.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/timrogers/gh-migration-audit.git"
+  }
+}
