@@ -12,6 +12,7 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 
 ## What unmigratable data can this tool detect?
 
+- Git LFS objects
 - Repository discussions
 - Repository rulesets
 

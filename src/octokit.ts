@@ -1,24 +1,62 @@
-import { fetch as undiciFetch, ProxyAgent, RequestInfo, RequestInit } from 'undici';
+import {
+  fetch as undiciFetch,
+  ProxyAgent,
+  RequestInfo as undiciRequestInfo,
+  RequestInit as undiciRequestInit,
+} from 'undici';
 import { Octokit } from 'octokit';
 import { paginateGraphql } from '@octokit/plugin-paginate-graphql';
+import { throttling } from '@octokit/plugin-throttling';
+import winston from 'winston';
 
-const OctokitWithPaginateGraphql = Octokit.plugin(paginateGraphql);
+const OctokitWithPlugins = Octokit.plugin(paginateGraphql).plugin(throttling);
+
+interface OnRateLimitOptions {
+  method: string;
+  url: string;
+}
 
 export const createOctokit = (
   token: string,
   baseUrl: string,
   proxyUrl: string | undefined,
+  logger: winston.Logger,
+  // We allow `any` here because we want to be able to pass in a mocked version of `fetch` -
+  // plus this `any` aligns with Octokit's typings.
+  //
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fetch?: any,
 ): Octokit => {
-  const customFetch = (url: RequestInfo, options: RequestInit) => {
+  const customFetch = (url: undiciRequestInfo, options: undiciRequestInit) => {
     return undiciFetch(url, {
       ...options,
       dispatcher: proxyUrl ? new ProxyAgent(proxyUrl) : undefined,
     });
   };
 
-  return new OctokitWithPaginateGraphql({
+  return new OctokitWithPlugins({
     auth: token,
     baseUrl,
-    request: { fetch: customFetch },
+    request: { fetch: fetch || customFetch },
+    throttle: {
+      onRateLimit: (retryAfter, options) => {
+        const { method, url } = options as OnRateLimitOptions;
+
+        logger.warn(
+          `Primary rate limit exceeded for request \`${method} ${url}\` - retrying after ${retryAfter} seconds`,
+        );
+
+        return true;
+      },
+      onSecondaryRateLimit: (retryAfter, options) => {
+        const { method, url } = options as OnRateLimitOptions;
+
+        logger.warn(
+          `Secondary rate limit exceeded for request \`${method} ${url}\` - retrying after ${retryAfter} seconds`,
+        );
+
+        return true;
+      },
+    },
   });
 };

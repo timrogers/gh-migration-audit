@@ -1,4 +1,5 @@
 import { AuditWarning, GraphqlRepository } from '../types';
+import { pluralize } from './helpers';
 
 const TYPE = 'repository-rulesets';
 
@@ -10,7 +11,11 @@ export default async ({
   if (graphqlRepository.rulesets.totalCount > 0) {
     return [
       {
-        message: `${graphqlRepository.rulesets.totalCount} rulesets apply to this repository, which will not be migrated.`,
+        message: `${pluralize(
+          graphqlRepository.rulesets.totalCount,
+          'ruleset applies',
+          'rulesets apply',
+        )} to this repository, which will not be migrated`,
         type: TYPE,
       },
     ];

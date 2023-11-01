@@ -11,6 +11,7 @@ import { getRepositoryWithGraphql } from '../repositories.js';
 import repositoryRulesets from '../auditors/repository-rulesets.js';
 import { AuditWarning, Auditor, GraphqlRepository } from '../types.js';
 import repositoryDiscussions from '../auditors/repository-discussions.js';
+import gitLfsObjects from '../auditors/git-lfs-objects.js';
 
 const command = new commander.Command();
 
@@ -23,7 +24,7 @@ interface Arguments {
   proxyUrl: string | undefined;
 }
 
-const AUDITORS: Auditor[] = [repositoryRulesets, repositoryDiscussions];
+const AUDITORS: Auditor[] = [repositoryRulesets, repositoryDiscussions, gitLfsObjects];
 
 const runAuditors = async (
   graphqlRepository: GraphqlRepository,
@@ -104,7 +105,7 @@ command
       }
 
       const logger = createLogger(true);
-      const octokit = createOctokit(accessToken, baseUrl, proxyUrl);
+      const octokit = createOctokit(accessToken, baseUrl, proxyUrl, logger);
 
       logger.info(`Auditing ${owner}/${repo}...`);
 
