@@ -12,6 +12,7 @@ import repositoryRulesets from '../auditors/repository-rulesets.js';
 import { AuditWarning, Auditor, GraphqlRepository } from '../types.js';
 import repositoryDiscussions from '../auditors/repository-discussions.js';
 import gitLfsObjects from '../auditors/git-lfs-objects.js';
+import repositoryWebhooks from '../auditors/repository-webhooks.js';
 
 const command = new commander.Command();
 
@@ -24,7 +25,12 @@ interface Arguments {
   proxyUrl: string | undefined;
 }
 
-const AUDITORS: Auditor[] = [repositoryRulesets, repositoryDiscussions, gitLfsObjects];
+const AUDITORS: Auditor[] = [
+  repositoryRulesets,
+  repositoryDiscussions,
+  gitLfsObjects,
+  repositoryWebhooks,
+];
 
 const runAuditors = async (
   graphqlRepository: GraphqlRepository,

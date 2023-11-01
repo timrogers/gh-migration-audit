@@ -1,2 +1,9 @@
-export const pluralize = (count: number, singular: string, plural: string): string =>
-  [count, count == 1 ? singular : plural].join(' ');
+export const pluralize = (
+  count: number,
+  singular: string,
+  plural: string,
+  includeCount = true,
+): string =>
+  [includeCount ? count.toString() : null, count == 1 ? singular : plural]
+    .filter((x) => x)
+    .join(' ');

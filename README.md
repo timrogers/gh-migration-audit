@@ -15,6 +15,7 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 - Git LFS objects
 - Repository discussions
 - Repository rulesets
+- Repository webhooks
 
 ## Usage
 
