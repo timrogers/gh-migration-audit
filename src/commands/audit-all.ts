@@ -6,7 +6,7 @@ import { actionRunner, logRateLimitInformation, pluralize } from '../utils';
 import VERSION from '../version';
 import { createLogger } from '../logger';
 import { createOctokit } from '../octokit';
-import { AuditorWarning } from '../types';
+import { AuditWarning } from '../types';
 import { auditRepositories } from '../repository-auditor';
 
 const command = new commander.Command();
@@ -27,18 +27,22 @@ enum OwnerType {
 }
 
 const writeWarningsToCsv = async (
-  warnings: AuditorWarning[],
+  warnings: AuditWarning[],
   outputPath: string,
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
-    stringify(warnings, { header: true }, (err, output) => {
-      if (err) {
-        reject(err);
-      } else {
-        writeFileSync(outputPath, output);
-        resolve();
-      }
-    });
+    stringify(
+      warnings,
+      { columns: ['owner', 'name', 'type', 'message'], header: true },
+      (err, output) => {
+        if (err) {
+          reject(err);
+        } else {
+          writeFileSync(outputPath, output);
+          resolve();
+        }
+      },
+    );
   });
 };
 
