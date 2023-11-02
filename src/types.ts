@@ -26,6 +26,11 @@ export interface AuditWarning {
   owner: string;
 }
 
+export interface NameWithOwner {
+  owner: string;
+  name: string;
+}
+
 export type AuditorFunction = ({
   graphqlRepository,
   octokit,

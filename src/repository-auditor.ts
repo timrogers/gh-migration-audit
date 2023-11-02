@@ -5,6 +5,7 @@ import {
   Auditor,
   AuditWarning,
   GraphqlRepository,
+  NameWithOwner,
   RepositoryAuditWarning,
 } from './types.js';
 import * as repositoryRulesets from './auditors/repository-rulesets.js';
@@ -28,11 +29,6 @@ const AUDITORS: Auditor[] = [
   repositoryCodespacesSecrets,
   repositoryDependabotSecrets,
 ];
-
-interface NameWithOwner {
-  owner: string;
-  name: string;
-}
 
 export const auditRepositories = async ({
   octokit,

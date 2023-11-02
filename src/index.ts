@@ -5,6 +5,7 @@ import * as commander from 'commander';
 import VERSION from './version.js';
 import auditRepoCommand from './commands/audit-repo.js';
 import auditAllCommand from './commands/audit-all.js';
+import auditReposCommand from './commands/audit-repos.js';
 
 const program = new commander.Command();
 
@@ -14,6 +15,7 @@ program
   )
   .version(VERSION)
   .addCommand(auditRepoCommand)
+  .addCommand(auditReposCommand)
   .addCommand(auditAllCommand);
 
 program.parse();
