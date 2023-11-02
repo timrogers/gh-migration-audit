@@ -8,6 +8,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      actions: read
+      checks: write
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4.0.0
@@ -17,3 +24,17 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run test
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always() && github.actor != 'dependabot[bot]'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          check_name: Tests Results
+          files: 'test-results/jest/junit.xml'
+          report_individual_runs: true
+          deduplicate_classes_by_file_name: false
+
+      - name: Report Coverage
+        uses: ArtiomTr/jest-coverage-report-action@v2
+        if: always() && github.actor != 'dependabot[bot]'
