@@ -30,7 +30,7 @@ jobs:
         if: always() && github.actor != 'dependabot[bot]'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Tests Results
+          check_name: Test Results
           files: "test-results/jest/junit.xml"
           report_individual_runs: true
           deduplicate_classes_by_file_name: false
