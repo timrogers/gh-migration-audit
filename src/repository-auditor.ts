@@ -12,6 +12,9 @@ import * as repositoryDiscussions from './auditors/repository-discussions.js';
 import * as gitLfsObjects from './auditors/git-lfs-objects.js';
 import * as repositoryWebhooks from './auditors/repository-webhooks.js';
 import * as repositoryActionsVariables from './auditors/repository-actions-variables.js';
+import * as repositoryActionsSecrets from './auditors/repository-actions-secrets.js';
+import * as repositoryCodespacesSecrets from './auditors/repository-codespaces-secrets.js';
+import * as repositoryDependabotSecrets from './auditors/repository-dependabot-secrets.js';
 import { getRepositoryWithGraphql } from './repositories.js';
 import { presentError } from './utils.js';
 
@@ -21,6 +24,9 @@ const AUDITORS: Auditor[] = [
   gitLfsObjects,
   repositoryWebhooks,
   repositoryActionsVariables,
+  repositoryActionsSecrets,
+  repositoryCodespacesSecrets,
+  repositoryDependabotSecrets,
 ];
 
 interface NameWithOwner {

@@ -33,7 +33,10 @@ describe('repositoryActionVariables', () => {
   it("returns no warnings if there aren't any repository action variables", async () => {
     const fetch = fetchMock
       .sandbox()
-      .getOnce('https://api.github.com/repos/test/test/actions/variables?per_page=1', []);
+      .getOnce('https://api.github.com/repos/test/test/actions/variables?per_page=1', {
+        total_count: 0,
+        variables: [],
+      });
 
     const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
     const warnings = await auditor(auditorArguments);
