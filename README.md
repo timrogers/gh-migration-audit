@@ -13,6 +13,10 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 ## What unmigratable data can this tool detect?
 
 - Git LFS objects
+- Repository Actions secrets
+- Repository Actions variables
+- Repository Codespaces secrets
+- Repisitory Dependabot secrets
 - Repository discussions
 - Repository rulesets
 - Repository webhooks
