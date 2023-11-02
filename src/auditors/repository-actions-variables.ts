@@ -17,7 +17,7 @@ export const auditor = async ({
   const { data } = await octokit.rest.actions.listRepoVariables({
     owner,
     repo,
-    per_page: 1
+    per_page: 1,
   });
 
   if (data.total_count > 0) {

@@ -20,7 +20,7 @@ const AUDITORS: Auditor[] = [
   repositoryDiscussions,
   gitLfsObjects,
   repositoryWebhooks,
-  repositoryActionsVariables
+  repositoryActionsVariables,
 ];
 
 interface NameWithOwner {

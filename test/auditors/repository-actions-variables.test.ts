@@ -8,15 +8,15 @@ describe('repositoryActionVariables', () => {
     const fetch = fetchMock
       .sandbox()
       .getOnce('https://api.github.com/repos/test/test/actions/variables?per_page=1', {
-        "total_count": 2,
-        "variables": [
+        total_count: 2,
+        variables: [
           {
-            "name": "MYVAR",
-            "value": "1",
-            "created_at": "2023-01-01T10:32:55Z",
-            "updated_at": "2023-01-01T10:32:55Z"
-          }
-        ]        
+            name: 'MYVAR',
+            value: '1',
+            created_at: '2023-01-01T10:32:55Z',
+            updated_at: '2023-01-01T10:32:55Z',
+          },
+        ],
       });
 
     const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
