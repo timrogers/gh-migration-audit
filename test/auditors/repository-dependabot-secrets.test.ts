@@ -23,8 +23,7 @@ describe('repositoryDependabotSecrets', () => {
 
     expect(warnings).toEqual([
       {
-        message:
-          'This repository has 3 GitHub Actions secrets, which will not be migrated',
+        message: 'This repository has 3 Dependabot secrets, which will not be migrated',
       },
     ]);
   });

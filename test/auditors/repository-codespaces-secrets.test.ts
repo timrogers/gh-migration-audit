@@ -7,7 +7,7 @@ describe('repositoryCodespacesSecrets', () => {
   it('returns a warning if there are codespaces secrets', async () => {
     const fetch = fetchMock
       .sandbox()
-      .getOnce('https://api.github.com/repos/test/test/dependabot/secrets?per_page=1', {
+      .getOnce('https://api.github.com/repos/test/test/codespaces/secrets?per_page=1', {
         total_count: 2,
         secrets: [
           {
@@ -32,7 +32,7 @@ describe('repositoryCodespacesSecrets', () => {
   it("returns no warnings if there aren't any repository codespace secrets", async () => {
     const fetch = fetchMock
       .sandbox()
-      .getOnce('https://api.github.com/repos/test/test/dependabot/secrets?per_page=1', {
+      .getOnce('https://api.github.com/repos/test/test/codespaces/secrets?per_page=1', {
         total_count: 0,
         secrets: [],
       });
