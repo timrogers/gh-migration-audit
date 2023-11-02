@@ -1,14 +1,14 @@
 import fetchMock from 'fetch-mock';
 
 import { buildAuditorArguments } from '../helpers/auditors';
-import { auditor } from '../../src/auditors/repository-dependabot-secrets';
+import { auditor } from '../../src/auditors/repository-codespaces-secrets';
 
-describe('repositoryDependabotSecrets', () => {
-  it('returns a warning if there are dependabot secrets', async () => {
+describe('repositoryCodespacesSecrets', () => {
+  it('returns a warning if there are codespaces secrets', async () => {
     const fetch = fetchMock
       .sandbox()
-      .getOnce('https://api.github.com/repos/test/test/dependabot/secrets?per_page=1', {
-        total_count: 3,
+      .getOnce('https://api.github.com/repos/test/test/codespaces/secrets?per_page=1', {
+        total_count: 2,
         secrets: [
           {
             name: 'MYSECRET',
@@ -24,15 +24,15 @@ describe('repositoryDependabotSecrets', () => {
     expect(warnings).toEqual([
       {
         message:
-          'This repository has 3 GitHub Actions secrets, which will not be migrated',
+          'This repository has 2 GitHub Codespaces secrets, which will not be migrated',
       },
     ]);
   });
 
-  it("returns no warnings if there aren't any dependabpt secrets", async () => {
+  it("returns no warnings if there aren't any repository codespace secrets", async () => {
     const fetch = fetchMock
       .sandbox()
-      .getOnce('https://api.github.com/repos/test/test/dependabot/secrets?per_page=1', {
+      .getOnce('https://api.github.com/repos/test/test/codespaces/secrets?per_page=1', {
         total_count: 0,
         secrets: [],
       });

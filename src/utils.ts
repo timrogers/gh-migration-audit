@@ -3,6 +3,9 @@ import { RequestError } from '@octokit/request-error';
 import { GraphqlResponseError } from '@octokit/graphql';
 import type winston from 'winston';
 
+const RED_ESCAPE_SEQUENCE = '\x1b[31m';
+const RESET_ESCAPE_SEQUENCE = '\x1b[0m';
+
 export const logRateLimitInformation = async (
   logger: winston.Logger,
   octokit: Octokit,
@@ -31,7 +34,7 @@ export const presentError = (e: unknown): string => {
 };
 
 const actionErrorHandler = (error: Error): void => {
-  console.error(error.message);
+  console.error([RED_ESCAPE_SEQUENCE, error.message, RESET_ESCAPE_SEQUENCE].join(''));
   process.exit(1);
 };
 

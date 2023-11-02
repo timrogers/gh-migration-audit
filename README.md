@@ -13,14 +13,16 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 ## What unmigratable data can this tool detect?
 
 - Git LFS objects
+- Repository Actions secrets
+- Repository Actions variables
+- Repository Codespaces secrets
+- Repisitory Dependabot secrets
 - Repository discussions
 - Repository rulesets
 - Repository webhooks
 - Stars
 
-## Usage
-
-### Step 1. Install the GitHub CLI extension
+## Installation 
 
 Make sure you've got the [GitHub CLI](https://cli.github.com/) installed. If you haven't, you can install it by following the instructions [here](https://github.com/cli/cli#installation).
 
@@ -28,7 +30,9 @@ Once `gh` is ready and available on your machine, you can install this extension
 
 You can check that the extension is installed and working by running `gh migration-audit --help`.
 
-## Step 2. Audit your repo
+## Usage
+
+### Audit a single repo
 
 `gh migration-audit audit-repo` will audit a single GitHub repository and output a CSV file with information about data that cannot be migrated automatically.
 
@@ -54,7 +58,7 @@ gh migration-audit audit-repo \
 
 The tool will audit your repo, and then write a CSV file to the `--output-path` with the results.
 
-## Step 3. Audit all repos owned by a specific organization or user
+### Audit all repos owned by an organization or user
 
 `gh migration-audit audit-all` will audit all GitHub repositories owned by a specific organization or user, and output a CSV file with information about data that cannot be migrated automatically.
 
@@ -68,6 +72,36 @@ gh migration-audit audit-all \
     --owner monalisa \
     # The type of the owner of the repositories - either `user` or `organization`.
     --owner-type user \
+    # OPTIONAL: The path to write the audit result CSV to. Defaults to the specified owner followed by the current date and time, e.g. `monalisa_1698925405325.csv`.
+    --output-path octocat.csv \
+    # OPTIONAL: The base URL of the GitHub API, if you're migrating from a migration source other than GitHub.com.
+    --base-url https://github.acme.inc/api/v3
+    # OPTIONAL: The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.
+    --proxy-url https://10.0.0.1:3128
+```
+
+The tool will audit all of the repos, and then write a CSV file to the `--output-path` with the results.
+
+### Audit a specific set of repos
+
+`gh migration-audit audit-repos` will audit a specific list of repos specified in a CSV file, and output a CSV file with information about data that cannot be migrated automatically.
+
+To use this command, you'll need to start by preparing your input CSV. It should have exactly two columns, `owner` and `name`. On each row, `owner` should have the name of the user or organization that owns the repo, and `name` should have the name of the repo, e.g.:
+
+```
+owner,name
+monalisa,octocat
+timrogers,gh-migration-audit
+```
+
+You can run the command like this:
+
+```bash
+gh migration-audit audit-repos \
+    # A GitHub access token with the permissions described above. This can also be configured using the `GITHUB_TOKEN` environment variable.
+    --access-token GITHUB_TOKEN \
+    # The path to a input CSV file with a list of repos to audit. The file should have a header row with the columns `owner` and `name`, followed by a series of rows.
+    --input-path input.csv \
     # OPTIONAL: The path to write the audit result CSV to. Defaults to the specified owner followed by the current date and time, e.g. `monalisa_1698925405325.csv`.
     --output-path octocat.csv \
     # OPTIONAL: The base URL of the GitHub API, if you're migrating from a migration source other than GitHub.com.
