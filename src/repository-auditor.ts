@@ -7,18 +7,18 @@ import {
   GraphqlRepository,
   RepositoryAuditWarning,
 } from './types.js';
-import * as repositoryRulesets from './auditors/repository-rulesets.js';
-import * as repositoryDiscussions from './auditors/repository-discussions.js';
-import * as gitLfsObjects from './auditors/git-lfs-objects.js';
-import * as repositoryWebhooks from './auditors/repository-webhooks.js';
-import * as repositoryActionsVariables from './auditors/repository-actions-variables.js';
-import * as repositoryActionsSecrets from './auditors/repository-actions-secrets.js';
-import * as repositoryCodespacesSecrets from './auditors/repository-codespaces-secrets.js';
-import * as repositoryDependabotSecrets from './auditors/repository-dependabot-secrets.js';
-import { getRepositoryWithGraphql } from './repositories.js';
-import { presentError } from './utils.js';
+import * as repositoryRulesets from './auditors/repository-rulesets';
+import * as repositoryDiscussions from './auditors/repository-discussions';
+import * as gitLfsObjects from './auditors/git-lfs-objects';
+import * as repositoryWebhooks from './auditors/repository-webhooks';
+import * as repositoryActionsVariables from './auditors/repository-actions-variables';
+import * as repositoryActionsSecrets from './auditors/repository-actions-secrets';
+import * as repositoryCodespacesSecrets from './auditors/repository-codespaces-secrets';
+import * as repositoryDependabotSecrets from './auditors/repository-dependabot-secrets';
+import { getRepositoryWithGraphql } from './repositories';
+import { presentError } from './utils';
 
-const AUDITORS: Auditor[] = [
+const DEFAULT_AUDITORS: Auditor[] = [
   repositoryRulesets,
   repositoryDiscussions,
   gitLfsObjects,
@@ -38,15 +38,23 @@ export const auditRepositories = async ({
   octokit,
   nameWithOwners,
   logger,
+  auditors = DEFAULT_AUDITORS,
 }: {
   octokit: Octokit;
   nameWithOwners: NameWithOwner[];
   logger: winston.Logger;
+  auditors?: Auditor[];
 }): Promise<AuditWarning[]> => {
   const warnings: AuditWarning[] = [];
 
   for (const { name, owner } of nameWithOwners) {
-    const repoWarnings = await auditRepository({ octokit, owner, repo: name, logger });
+    const repoWarnings = await auditRepository({
+      octokit,
+      owner,
+      repo: name,
+      logger,
+      auditors,
+    });
 
     warnings.push(
       ...repoWarnings.map((repoWarning) => ({ ...repoWarning, name, owner })),
@@ -61,11 +69,13 @@ export const auditRepository = async ({
   owner,
   repo,
   logger,
+  auditors = DEFAULT_AUDITORS,
 }: {
   octokit: Octokit;
   owner: string;
   repo: string;
   logger: winston.Logger;
+  auditors?: Auditor[];
 }): Promise<RepositoryAuditWarning[]> => {
   const graphqlRepository = await getRepositoryWithGraphql({
     owner,
@@ -75,7 +85,7 @@ export const auditRepository = async ({
 
   const warnings: RepositoryAuditWarning[] = [];
 
-  for (const auditor of AUDITORS) {
+  for (const auditor of auditors) {
     const auditWarnings = await runAuditor(
       auditor,
       octokit,
