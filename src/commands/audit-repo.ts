@@ -6,7 +6,7 @@ import { actionRunner, logRateLimitInformation } from '../utils';
 import VERSION from '../version';
 import { createLogger } from '../logger';
 import { createOctokit } from '../octokit';
-import { AuditorWarning } from '../types';
+import { RepositoryAuditWarning } from '../types';
 import { auditRepository } from '../repository-auditor';
 
 const command = new commander.Command();
@@ -21,11 +21,11 @@ interface Arguments {
 }
 
 const writeWarningsToCsv = async (
-  warnings: AuditorWarning[],
+  warnings: RepositoryAuditWarning[],
   outputPath: string,
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
-    stringify(warnings, { header: true }, (err, output) => {
+    stringify(warnings, { columns: ['type', 'message'], header: true }, (err, output) => {
       if (err) {
         reject(err);
       } else {
