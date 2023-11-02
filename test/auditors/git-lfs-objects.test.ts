@@ -1,7 +1,7 @@
 import fetchMock from 'fetch-mock';
 
 import { buildAuditorArguments } from '../helpers/auditors';
-import gitLfsObjects from '../../src/auditors/git-lfs-objects';
+import { auditor } from '../../src/auditors/git-lfs-objects';
 
 describe('git-lfs-objects', () => {
   it('returns a warning if there is a .gitattributes file indicating that Git LFS is configured', async () => {
@@ -14,13 +14,12 @@ describe('git-lfs-objects', () => {
       });
 
     const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
-    const warnings = await gitLfsObjects(auditorArguments);
+    const warnings = await auditor(auditorArguments);
 
     expect(warnings).toEqual([
       {
         message:
           'This repository seems to use Git LFS. LFS objects will not be migrated automatically.',
-        type: 'git-lfs-objects',
       },
     ]);
   });
@@ -31,7 +30,7 @@ describe('git-lfs-objects', () => {
       .getOnce('https://api.github.com/repos/test/test/contents/.gitattributes', 404);
 
     const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
-    const warnings = await gitLfsObjects(auditorArguments);
+    const warnings = await auditor(auditorArguments);
 
     expect(warnings).toEqual([]);
   });

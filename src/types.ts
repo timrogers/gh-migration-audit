@@ -10,12 +10,23 @@ export interface GraphqlRepository {
   };
 }
 
-export interface AuditWarning {
+export interface AuditorWarning {
+  message: string;
+}
+
+export interface RepositoryAuditWarning {
   message: string;
   type: string;
 }
 
-export type Auditor = ({
+export interface AuditWarning {
+  message: string;
+  type: string;
+  name: string;
+  owner: string;
+}
+
+export type AuditorFunction = ({
   graphqlRepository,
   octokit,
   owner,
@@ -25,4 +36,9 @@ export type Auditor = ({
   octokit: Octokit;
   owner: string;
   repo: string;
-}) => Promise<AuditWarning[]>;
+}) => Promise<AuditorWarning[]>;
+
+export interface Auditor {
+  TYPE: string;
+  auditor: AuditorFunction;
+}

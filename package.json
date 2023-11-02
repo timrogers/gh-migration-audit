@@ -8,7 +8,7 @@
     "package": "node build.js && npx pkg dist/migration-audit.cjs --out-path bin",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
-    "dev": "npx ts-node --esm src/index.ts",
+    "dev": "node --experimental-specifier-resolution=node --loader ts-node/esm src/index.ts",
     "test": "jest"
   },
   "author": "Tim Rogers <me@timrogers.co.uk>",

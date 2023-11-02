@@ -3,7 +3,7 @@ import type { Octokit } from 'octokit';
 import { AuditorWarning } from '../types';
 import { pluralize } from '../utils';
 
-export const TYPE = 'repository-webhooks';
+export const TYPE = 'stargazers';
 
 export const auditor = async ({
   octokit,
@@ -14,7 +14,7 @@ export const auditor = async ({
   owner: string;
   repo: string;
 }): Promise<AuditorWarning[]> => {
-  const { data } = await octokit.rest.repos.listWebhooks({
+  const { data } = await octokit.rest.activity.listStargazersForRepo({
     owner,
     repo,
   });
@@ -22,11 +22,11 @@ export const auditor = async ({
   if (data.length > 0) {
     return [
       {
-        message: `This repository has ${pluralize(
+        message: `${pluralize(
           data.length,
-          'webhook',
-          'webhooks',
-        )}. These will be migrated, but they will be disabled by default, and their secrets will be wiped.`,
+          'user has starred',
+          'users have starred',
+        )} this repo. Stars will not be transferred as part of a migration.`,
       },
     ];
   } else {

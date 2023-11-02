@@ -16,6 +16,7 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 - Repository discussions
 - Repository rulesets
 - Repository webhooks
+- Stars
 
 ## Usage
 
@@ -43,7 +44,7 @@ gh migration-audit audit-repo \
     --owner monalisa \
     # The name of the repository
     --repo octocat \
-    # OPTIONAL: The path to write the audit result CSV to. Defaults to `output.csv`.
+    # OPTIONAL: The path to write the audit result CSV to. Defaults to the specified owner and repo, followed by the current date and time, e.g. `monalisa_octocat_1698925405325.csv
     --output-path octocat.csv \
     # OPTIONAL: The base URL of the GitHub API, if you're migrating from a migration source other than GitHub.com.
     --base-url https://github.acme.inc/api/v3
@@ -52,6 +53,30 @@ gh migration-audit audit-repo \
 ```
 
 The tool will audit your repo, and then write a CSV file to the `--output-path` with the results.
+
+## Step 3. Audit all repos owned by a specific organization or user
+
+`gh migration-audit audit-all` will audit all GitHub repositories owned by a specific organization or user, and output a CSV file with information about data that cannot be migrated automatically.
+
+You can run the command like this:
+
+```bash
+gh migration-audit audit-all \
+    # A GitHub access token with the permissions described above. This can also be configured using the `GITHUB_TOKEN` environment variable.
+    --access-token GITHUB_TOKEN \
+    # The login of the user or organization that owns the repositories.
+    --owner monalisa \
+    # The type of the owner of the repositories - either `user` or `organization`.
+    --owner-type user \
+    # OPTIONAL: The path to write the audit result CSV to. Defaults to the specified owner followed by the current date and time, e.g. `monalisa_1698925405325.csv`.
+    --output-path octocat.csv \
+    # OPTIONAL: The base URL of the GitHub API, if you're migrating from a migration source other than GitHub.com.
+    --base-url https://github.acme.inc/api/v3
+    # OPTIONAL: The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.
+    --proxy-url https://10.0.0.1:3128
+```
+
+The tool will audit all of the repos, and then write a CSV file to the `--output-path` with the results.
 
 ## Contributing
 

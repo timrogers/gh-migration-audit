@@ -1,10 +1,10 @@
 import type { Octokit, RequestError } from 'octokit';
 
-import { AuditWarning } from '../types';
+import { AuditorWarning } from '../types';
 
-const TYPE = 'git-lfs-objects';
+export const TYPE = 'git-lfs-objects';
 
-export default async ({
+export const auditor = async ({
   octokit,
   owner,
   repo,
@@ -12,7 +12,7 @@ export default async ({
   octokit: Octokit;
   owner: string;
   repo: string;
-}): Promise<AuditWarning[]> => {
+}): Promise<AuditorWarning[]> => {
   let response;
 
   try {
@@ -38,7 +38,6 @@ export default async ({
       return [
         {
           message: `This repository seems to use Git LFS. LFS objects will not be migrated automatically.`,
-          type: TYPE,
         },
       ];
     } else {

@@ -1,4 +1,4 @@
-import { pluralize } from '../../src/auditors/helpers';
+import { pluralize } from '../src/utils';
 
 describe('pluralize', () => {
   it('returns the singular form if the count is 1', () => {

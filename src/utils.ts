@@ -2,7 +2,6 @@ import { type Octokit } from 'octokit';
 import { RequestError } from '@octokit/request-error';
 import { GraphqlResponseError } from '@octokit/graphql';
 import type winston from 'winston';
-import chalk from 'chalk';
 
 export const logRateLimitInformation = async (
   logger: winston.Logger,
@@ -32,7 +31,7 @@ export const presentError = (e: unknown): string => {
 };
 
 const actionErrorHandler = (error: Error): void => {
-  console.error(chalk.red(error.message));
+  console.error(error.message);
   process.exit(1);
 };
 
@@ -41,3 +40,13 @@ export const actionRunner = (fn: (...args) => Promise<void>) => {
   //@ts-expect-error - This is a hack to make the actionRunner function work
   return async (...args) => await fn(...args).catch(actionErrorHandler);
 };
+
+export const pluralize = (
+  count: number,
+  singular: string,
+  plural: string,
+  includeCount = true,
+): string =>
+  [includeCount ? count.toString() : null, count == 1 ? singular : plural]
+    .filter((x) => x)
+    .join(' ');

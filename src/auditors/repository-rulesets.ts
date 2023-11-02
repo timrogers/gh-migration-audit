@@ -1,13 +1,13 @@
-import { AuditWarning, GraphqlRepository } from '../types';
-import { pluralize } from './helpers';
+import { AuditorWarning, GraphqlRepository } from '../types';
+import { pluralize } from '../utils';
 
-const TYPE = 'repository-rulesets';
+export const TYPE = 'repository-rulesets';
 
-export default async ({
+export const auditor = async ({
   graphqlRepository,
 }: {
   graphqlRepository: GraphqlRepository;
-}): Promise<AuditWarning[]> => {
+}): Promise<AuditorWarning[]> => {
   if (graphqlRepository.rulesets.totalCount > 0) {
     return [
       {
@@ -16,7 +16,6 @@ export default async ({
           'ruleset applies',
           'rulesets apply',
         )} to this repository, which will not be migrated`,
-        type: TYPE,
       },
     ];
   } else {
