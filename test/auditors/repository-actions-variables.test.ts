@@ -25,7 +25,7 @@ describe('repositoryActionVariables', () => {
     expect(warnings).toEqual([
       {
         message:
-          'This repository has 2 action variables, which will not be migrated',
+          'This repository has 2 GitHub Actions variables, which will not be migrated',
       },
     ]);
   });

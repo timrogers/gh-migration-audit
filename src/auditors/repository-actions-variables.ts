@@ -25,8 +25,8 @@ export const auditor = async ({
       {
         message: `This repository has ${pluralize(
           data.total_count,
-          'action variable',
-          'action variables',
+          'GitHub Actions variable',
+          'GitHub Actions variables',
         )}, which will not be migrated`,
       },
     ];
