@@ -11,6 +11,7 @@ import * as repositoryRulesets from './auditors/repository-rulesets.js';
 import * as repositoryDiscussions from './auditors/repository-discussions.js';
 import * as gitLfsObjects from './auditors/git-lfs-objects.js';
 import * as repositoryWebhooks from './auditors/repository-webhooks.js';
+import * as repositoryActionsVariables from './auditors/repository-actions-variables.js';
 import { getRepositoryWithGraphql } from './repositories.js';
 import { presentError } from './utils.js';
 
@@ -19,6 +20,7 @@ const AUDITORS: Auditor[] = [
   repositoryDiscussions,
   gitLfsObjects,
   repositoryWebhooks,
+  repositoryActionsVariables
 ];
 
 interface NameWithOwner {
