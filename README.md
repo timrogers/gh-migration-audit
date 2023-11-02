@@ -22,9 +22,7 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 - Repository webhooks
 - Stars
 
-## Usage
-
-### Step 1. Install the GitHub CLI extension
+## Installation 
 
 Make sure you've got the [GitHub CLI](https://cli.github.com/) installed. If you haven't, you can install it by following the instructions [here](https://github.com/cli/cli#installation).
 
@@ -32,7 +30,9 @@ Once `gh` is ready and available on your machine, you can install this extension
 
 You can check that the extension is installed and working by running `gh migration-audit --help`.
 
-## Step 2. Audit your repo
+## Usage
+
+### Audit a single repo
 
 `gh migration-audit audit-repo` will audit a single GitHub repository and output a CSV file with information about data that cannot be migrated automatically.
 
@@ -58,7 +58,7 @@ gh migration-audit audit-repo \
 
 The tool will audit your repo, and then write a CSV file to the `--output-path` with the results.
 
-## Step 3. Audit all repos owned by a specific organization or user
+### Audit all repos owned by an organization or user
 
 `gh migration-audit audit-all` will audit all GitHub repositories owned by a specific organization or user, and output a CSV file with information about data that cannot be migrated automatically.
 
