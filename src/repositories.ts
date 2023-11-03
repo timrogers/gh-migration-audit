@@ -24,6 +24,12 @@ export const getRepositoryWithGraphql = async ({
         rulesets(first: 1) {
           totalCount
         }
+        deployKeys(first: 1) {
+          totalCount
+        }
+        packages { totalCount }
+        deployments { totalCount }
+        environments { totalCount }
       }
     }`,
     {

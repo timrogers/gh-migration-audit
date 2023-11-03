@@ -11,6 +11,18 @@ export const buildRepository = (
     discussions: {
       totalCount: 0,
     },
+    deployKeys: {
+      totalCount: 0,
+    },
+    deployments: {
+      totalCount: 0,
+    },
+    packages: {
+      totalCount: 0,
+    },
+    environments: {
+      totalCount: 0,
+    },
     ...overrides,
   };
 };

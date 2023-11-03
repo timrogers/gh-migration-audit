@@ -16,6 +16,10 @@ import * as repositoryActionsVariables from './auditors/repository-actions-varia
 import * as repositoryActionsSecrets from './auditors/repository-actions-secrets';
 import * as repositoryCodespacesSecrets from './auditors/repository-codespaces-secrets';
 import * as repositoryDependabotSecrets from './auditors/repository-dependabot-secrets';
+import * as repositoryDeployKeys from './auditors/repository-deploykeys';
+import * as repositoryPackages from './auditors/repository-packages';
+import * as repositoryDeployments from './auditors/repository-deployments';
+import * as repositoryEnvironments from './auditors/repository-environments';
 import { getRepositoryWithGraphql } from './repositories';
 import { presentError } from './utils';
 
@@ -28,6 +32,10 @@ const DEFAULT_AUDITORS: Auditor[] = [
   repositoryActionsSecrets,
   repositoryCodespacesSecrets,
   repositoryDependabotSecrets,
+  repositoryDeployKeys,
+  repositoryPackages,
+  repositoryDeployments,
+  repositoryEnvironments,
 ];
 
 export const auditRepositories = async ({
