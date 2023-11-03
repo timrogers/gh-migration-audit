@@ -1,0 +1,70 @@
+name: Publish Test Results
+on:
+  workflow_run:
+    workflows:
+      - "CI"
+    types:
+      - completed
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion != 'skipped' }}
+
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+      actions: read
+      checks: write
+
+    steps:
+      - name: Download and Extract Test Artifacts
+        uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e
+        with:
+           run_id: ${{ github.event.workflow_run.id }}
+           path: .
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          commit: ${{ github.event.workflow_run.head_sha }}
+          event_file: testfiles/event.json
+          event_name: ${{ github.event.workflow_run.event }}
+          files: "testfiles/test-results/**/*.xml"
+
+      # For some strange reasons sometimes github.event.workflow_run.pull_requests is []
+      # So we need to extract the PR number from the event.json file just in case.
+      - name: Extract PR Number from event
+        if: github.event.workflow_run.event == 'pull_request'
+        id: pr
+        run: |
+          prnumber=$(jq -r '.pull_request.number' testfiles/event.json | tr -cd '0-9')
+          echo "number=$prnumber" >> "$GITHUB_OUTPUT"
+          echo "pr: $prnumber"
+
+      - name: Generate Code Coverage MD Report
+        uses: irongut/CodeCoverageSummary@51cc3a756ddcd398d447c044c02cb6aa83fdae95
+        id: codecoverage
+        with:
+          filename: testfiles/coverage/cobertura-coverage.xml
+          badge: true
+          fail_below_min: false
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: false
+          indicators: true
+          output: both
+
+      - name: Add Coverage Summary
+        run: |
+          echo '## Code Coverage' >> $GITHUB_STEP_SUMMARY
+          cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event.workflow_run.event == 'pull_request'
+        with:
+          number: ${{ github.event.workflow_run.pull_requests[0].number || steps.pr.outputs.number }}
+          recreate: false
+          path: code-coverage-results.md
