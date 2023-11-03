@@ -4,7 +4,7 @@ A [GitHub CLI](https://cli.github.com/) [extension](https://cli.github.com/manua
 
 You can use this tool to identify data that will be lost, or which you'll need to migrate manually, when migrating:
 
-* from GitHub Enterprise Server (GHES) to GitHub Enterprise Cloud (GHEC)
+* from GitHub Enterprise Server (GHES) v3.6 onwards to GitHub Enterprise Cloud (GHEC)
 * from GitHub Enterprise Cloud (GHEC) to GitHub Enterprise Server (GHES)
 * between tenants on GitHub.com (e.g. from a normal GitHub.com account to an [Enterprise Managed Users](https://docs.github.com/en/enterprise-cloud@latest/admin/identity-and-access-management/using-enterprise-managed-users-for-iam/about-enterprise-managed-users) organization)
 
@@ -51,9 +51,11 @@ gh migration-audit audit-repo \
     # OPTIONAL: The path to write the audit result CSV to. Defaults to the specified owner and repo, followed by the current date and time, e.g. `monalisa_octocat_1698925405325.csv
     --output-path octocat.csv \
     # OPTIONAL: The base URL of the GitHub API, if you're migrating from a migration source other than GitHub.com.
-    --base-url https://github.acme.inc/api/v3
+    --base-url https://github.acme.inc/api/v3 \
     # OPTIONAL: The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.
-    --proxy-url https://10.0.0.1:3128
+    --proxy-url https://10.0.0.1:3128 \
+    # OPTIONAL: Whether to emit detailed, verbose logs
+    --verbose
 ```
 
 The tool will audit your repo, and then write a CSV file to the `--output-path` with the results.
@@ -75,9 +77,11 @@ gh migration-audit audit-all \
     # OPTIONAL: The path to write the audit result CSV to. Defaults to the specified owner followed by the current date and time, e.g. `monalisa_1698925405325.csv`.
     --output-path octocat.csv \
     # OPTIONAL: The base URL of the GitHub API, if you're migrating from a migration source other than GitHub.com.
-    --base-url https://github.acme.inc/api/v3
+    --base-url https://github.acme.inc/api/v3 \
     # OPTIONAL: The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.
-    --proxy-url https://10.0.0.1:3128
+    --proxy-url https://10.0.0.1:3128 \
+    # OPTIONAL: Whether to emit detailed, verbose logs
+    --verbose
 ```
 
 The tool will audit all of the repos, and then write a CSV file to the `--output-path` with the results.
@@ -105,9 +109,11 @@ gh migration-audit audit-repos \
     # OPTIONAL: The path to write the audit result CSV to. Defaults to the "repos" followed by the current date and time, e.g. `repos_1698925405325.csv`.
     --output-path octocat.csv \
     # OPTIONAL: The base URL of the GitHub API, if you're migrating from a migration source other than GitHub.com.
-    --base-url https://github.acme.inc/api/v3
+    --base-url https://github.acme.inc/api/v3 \
     # OPTIONAL: The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.
-    --proxy-url https://10.0.0.1:3128
+    --proxy-url https://10.0.0.1:3128 \
+    # OPTIONAL: Whether to emit detailed, verbose logs
+    --verbose
 ```
 
 The tool will audit all of the repos, and then write a CSV file to the `--output-path` with the results.
