@@ -9,6 +9,11 @@ import { createLogger } from '../logger';
 import { createOctokit } from '../octokit';
 import { AuditWarning, NameWithOwner } from '../types';
 import { auditRepositories } from '../repository-auditor';
+import {
+  MINIMUM_SUPPORTED_GITHUB_ENTERPRISE_SERVER_VERSION,
+  getGitHubProductInformation,
+  isSupportedGitHubEnterpriseServerVersion,
+} from '../github-products';
 
 const command = new commander.Command();
 
@@ -18,6 +23,7 @@ interface Arguments {
   inputPath: string;
   outputPath: string | undefined;
   proxyUrl: string | undefined;
+  verbose: boolean;
 }
 
 const writeWarningsToCsv = async (
@@ -93,7 +99,7 @@ command
   )
   .option(
     '--output-path <output_path>',
-    'The path to write the audit result CSV to. Defaults to the "repos"" followed by the current date and time, e.g. `repos_1698925405325.csv`.',
+    'The path to write the audit result CSV to. Defaults to the "repos" followed by the current date and time, e.g. `repos_1698925405325.csv`.',
   )
   .requiredOption(
     '--input-path <input_path>',
@@ -104,9 +110,10 @@ command
     'The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.',
     process.env.PROXY_URL,
   )
+  .option('--verbose', 'Whether to emit detailed, verbose logs', false)
   .action(
     actionRunner(async (opts: Arguments) => {
-      const { accessToken, baseUrl, inputPath, proxyUrl } = opts;
+      const { accessToken, baseUrl, inputPath, proxyUrl, verbose } = opts;
 
       if (!accessToken) {
         throw new Error(
@@ -126,7 +133,7 @@ command
         throw new Error(`The input path, \`${inputPath}\` does not exist.`);
       }
 
-      const logger = createLogger(true);
+      const logger = createLogger(verbose);
       const octokit = createOctokit(accessToken, baseUrl, proxyUrl, logger);
 
       void logRateLimitInformation(logger, octokit);
@@ -145,7 +152,29 @@ command
         `Found ${pluralize(nameWithOwners.length, 'repo', 'repos')} in input CSV file`,
       );
 
-      const warnings = await auditRepositories({ octokit, logger, nameWithOwners });
+      const { isGitHubEnterpriseServer, gitHubEnterpriseServerVersion } =
+        await getGitHubProductInformation(octokit);
+
+      if (isGitHubEnterpriseServer) {
+        if (!isSupportedGitHubEnterpriseServerVersion(gitHubEnterpriseServerVersion)) {
+          throw new Error(
+            `GitHub Enterprise Server ${gitHubEnterpriseServerVersion} is not supported. This tool can only be used with GitHub Enterprise Server ${MINIMUM_SUPPORTED_GITHUB_ENTERPRISE_SERVER_VERSION} and later.`,
+          );
+        }
+
+        logger.info(
+          `Running in GitHub Enterprise Server ${gitHubEnterpriseServerVersion} mode...`,
+        );
+      } else {
+        logger.info('Running in GitHub.com mode...');
+      }
+
+      const warnings = await auditRepositories({
+        octokit,
+        logger,
+        nameWithOwners,
+        gitHubEnterpriseServerVersion,
+      });
 
       await writeWarningsToCsv(warnings, outputPath);
 

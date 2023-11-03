@@ -8,6 +8,11 @@ import { createLogger } from '../logger';
 import { createOctokit } from '../octokit';
 import { AuditWarning } from '../types';
 import { auditRepositories } from '../repository-auditor';
+import {
+  MINIMUM_SUPPORTED_GITHUB_ENTERPRISE_SERVER_VERSION,
+  getGitHubProductInformation,
+  isSupportedGitHubEnterpriseServerVersion,
+} from '../github-products';
 
 const command = new commander.Command();
 const { Option } = commander;
@@ -19,6 +24,7 @@ interface Arguments {
   owner: string;
   ownerType: OwnerType;
   proxyUrl: string | undefined;
+  verbose: boolean;
 }
 
 enum OwnerType {
@@ -80,9 +86,10 @@ command
     'The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.',
     process.env.PROXY_URL,
   )
+  .option('--verbose', 'Whether to emit detailed, verbose logs', false)
   .action(
     actionRunner(async (opts: Arguments) => {
-      const { accessToken, baseUrl, owner, ownerType, proxyUrl } = opts;
+      const { accessToken, baseUrl, owner, ownerType, proxyUrl, verbose } = opts;
 
       if (!accessToken) {
         throw new Error(
@@ -98,7 +105,7 @@ command
         );
       }
 
-      const logger = createLogger(true);
+      const logger = createLogger(verbose);
       const octokit = createOctokit(accessToken, baseUrl, proxyUrl, logger);
 
       void logRateLimitInformation(logger, octokit);
@@ -106,6 +113,23 @@ command
       setInterval(() => {
         void logRateLimitInformation(logger, octokit);
       }, 30_000);
+
+      const { isGitHubEnterpriseServer, gitHubEnterpriseServerVersion } =
+        await getGitHubProductInformation(octokit);
+
+      if (isGitHubEnterpriseServer) {
+        if (!isSupportedGitHubEnterpriseServerVersion(gitHubEnterpriseServerVersion)) {
+          throw new Error(
+            `GitHub Enterprise Server ${gitHubEnterpriseServerVersion} is not supported. This tool can only be used with GitHub Enterprise Server ${MINIMUM_SUPPORTED_GITHUB_ENTERPRISE_SERVER_VERSION} and later.`,
+          );
+        }
+
+        logger.info(
+          `Running in GitHub Enterprise Server ${gitHubEnterpriseServerVersion} mode...`,
+        );
+      } else {
+        logger.info('Running in GitHub.com mode...');
+      }
 
       logger.info(`Identifying all repos owned by ${owner}...`);
 
@@ -139,7 +163,12 @@ command
 
       const nameWithOwners = repoNames.map((name) => ({ owner, name }));
 
-      const warnings = await auditRepositories({ octokit, logger, nameWithOwners });
+      const warnings = await auditRepositories({
+        octokit,
+        logger,
+        nameWithOwners,
+        gitHubEnterpriseServerVersion,
+      });
 
       await writeWarningsToCsv(warnings, outputPath);
 

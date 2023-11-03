@@ -41,4 +41,18 @@ describe('repositoryDependabotSecrets', () => {
 
     expect(warnings).toEqual([]);
   });
+
+  it('returns no warnings if the API returns a 500', async () => {
+    const fetch = fetchMock
+      .sandbox()
+      .getOnce(
+        'https://api.github.com/repos/test/test/dependabot/secrets?per_page=1',
+        500,
+      );
+
+    const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
+    const warnings = await auditor(auditorArguments);
+
+    expect(warnings).toEqual([]);
+  });
 });

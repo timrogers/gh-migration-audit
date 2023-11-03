@@ -5,9 +5,6 @@ export const buildRepository = (
 ): GraphqlRepository => {
   return {
     id: 'test',
-    rulesets: {
-      totalCount: 0,
-    },
     discussions: {
       totalCount: 0,
     },

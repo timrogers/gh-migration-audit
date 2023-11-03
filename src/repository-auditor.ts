@@ -43,11 +43,13 @@ export const auditRepositories = async ({
   nameWithOwners,
   logger,
   auditors = DEFAULT_AUDITORS,
+  gitHubEnterpriseServerVersion,
 }: {
   octokit: Octokit;
   nameWithOwners: NameWithOwner[];
   logger: winston.Logger;
   auditors?: Auditor[];
+  gitHubEnterpriseServerVersion: string | undefined;
 }): Promise<AuditWarning[]> => {
   const warnings: AuditWarning[] = [];
 
@@ -58,6 +60,7 @@ export const auditRepositories = async ({
       repo: name,
       logger,
       auditors,
+      gitHubEnterpriseServerVersion,
     });
 
     warnings.push(
@@ -74,12 +77,14 @@ export const auditRepository = async ({
   repo,
   logger,
   auditors = DEFAULT_AUDITORS,
+  gitHubEnterpriseServerVersion,
 }: {
   octokit: Octokit;
   owner: string;
   repo: string;
   logger: winston.Logger;
   auditors?: Auditor[];
+  gitHubEnterpriseServerVersion: string | undefined;
 }): Promise<RepositoryAuditWarning[]> => {
   const graphqlRepository = await getRepositoryWithGraphql({
     owner,
@@ -97,6 +102,7 @@ export const auditRepository = async ({
       repo,
       graphqlRepository,
       logger,
+      gitHubEnterpriseServerVersion,
     );
     warnings.push(...auditWarnings);
   }
@@ -111,12 +117,27 @@ const runAuditor = async (
   repo: string,
   graphqlRepository: GraphqlRepository,
   logger: winston.Logger,
+  gitHubEnterpriseServerVersion: string | undefined,
 ): Promise<RepositoryAuditWarning[]> => {
+  logger.debug(`Running auditor ${auditor.TYPE}`, { owner, repo });
+
   try {
-    const warnings = await auditor.auditor({ graphqlRepository, octokit, owner, repo });
+    const warnings = await auditor.auditor({
+      graphqlRepository,
+      octokit,
+      owner,
+      repo,
+      gitHubEnterpriseServerVersion,
+      logger,
+    });
     return warnings.map((auditorWarning) => ({ ...auditorWarning, type: auditor.TYPE }));
   } catch (e) {
-    logger.error(`Auditor \`${auditor.TYPE}\` failed with error: ${presentError(e)}`);
+    logger.error(
+      `Auditor \`${auditor.TYPE}\` failed for ${owner}/${repo} with error: ${presentError(
+        e,
+      )}`,
+      { owner, repo },
+    );
     return [];
   }
 };

@@ -1,21 +1,28 @@
-import { AuditorWarning, GraphqlRepository } from '../types';
-import { pluralize } from '../utils';
+import { AuditorFunction, AuditorWarning } from '../types';
 
 export const TYPE = 'repository-rulesets';
 
-export const auditor = async ({
-  graphqlRepository,
-}: {
-  graphqlRepository: GraphqlRepository;
+export const auditor: AuditorFunction = async ({
+  gitHubEnterpriseServerVersion,
+  octokit,
+  owner,
+  repo,
 }): Promise<AuditorWarning[]> => {
-  if (graphqlRepository.rulesets.totalCount > 0) {
+  if (typeof gitHubEnterpriseServerVersion !== 'undefined') {
+    return [];
+  }
+
+  const { data: rulesets } = await octokit.rest.repos.getRepoRulesets({
+    owner,
+    repo,
+    per_page: 1,
+    includes_parents: true,
+  });
+
+  if (rulesets.length > 0) {
     return [
       {
-        message: `${pluralize(
-          graphqlRepository.rulesets.totalCount,
-          'ruleset applies',
-          'rulesets apply',
-        )} to this repository, which will not be migrated`,
+        message: `One or more repository or organization rulesets apply to this repository, which will not be migrated`,
       },
     ];
   } else {

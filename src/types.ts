@@ -1,10 +1,8 @@
 import type { Octokit } from 'octokit';
+import winston from 'winston';
 
 export interface GraphqlRepository {
   id: string;
-  rulesets: {
-    totalCount: number;
-  };
   discussions: {
     totalCount: number;
   };
@@ -43,17 +41,23 @@ export interface NameWithOwner {
   name: string;
 }
 
+export type AuditorFunctionArgs = {
+  graphqlRepository: GraphqlRepository;
+  octokit: Octokit;
+  owner: string;
+  repo: string;
+  gitHubEnterpriseServerVersion: string | undefined;
+  logger: winston.Logger;
+};
+
 export type AuditorFunction = ({
   graphqlRepository,
   octokit,
   owner,
   repo,
-}: {
-  graphqlRepository: GraphqlRepository;
-  octokit: Octokit;
-  owner: string;
-  repo: string;
-}) => Promise<AuditorWarning[]>;
+  gitHubEnterpriseServerVersion,
+  logger,
+}: AuditorFunctionArgs) => Promise<AuditorWarning[]>;
 
 export interface Auditor {
   TYPE: string;
