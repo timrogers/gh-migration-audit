@@ -1,19 +1,23 @@
-import type { Octokit } from 'octokit';
+import semver from 'semver';
 
-import { AuditorWarning } from '../types';
+import { AuditorFunction, AuditorWarning } from '../types';
 import { pluralize } from '../utils';
 
 export const TYPE = 'repository-actions-variables';
 
-export const auditor = async ({
+export const auditor: AuditorFunction = async ({
+  gitHubEnterpriseServerVersion,
   octokit,
   owner,
   repo,
-}: {
-  octokit: Octokit;
-  owner: string;
-  repo: string;
 }): Promise<AuditorWarning[]> => {
+  if (
+    typeof gitHubEnterpriseServerVersion !== 'undefined' &&
+    semver.lt(gitHubEnterpriseServerVersion, '3.8.0')
+  ) {
+    return [];
+  }
+
   const { data } = await octokit.rest.actions.listRepoVariables({
     owner,
     repo,

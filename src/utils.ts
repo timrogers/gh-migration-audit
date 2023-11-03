@@ -13,14 +13,18 @@ export const logRateLimitInformation = async (
   try {
     const graphqlRateLimitResponse = (await octokit.graphql(
       'query { rateLimit { limit remaining resetAt } }',
-    )) as { rateLimit: { limit: number; remaining: number; resetAt: string } };
-    const graphqlUsedRateLimit =
-      graphqlRateLimitResponse.rateLimit.limit -
-      graphqlRateLimitResponse.rateLimit.remaining;
+    )) as { rateLimit: { limit: number; remaining: number; resetAt: string } | null };
 
-    logger.info(
-      `GitHub GraphQL rate limit: ${graphqlUsedRateLimit}/${graphqlRateLimitResponse.rateLimit.limit} used - resets at ${graphqlRateLimitResponse.rateLimit.resetAt}`,
-    );
+    // Rate limiting may be disabled on GHES, in which case this returns null
+    if (graphqlRateLimitResponse.rateLimit) {
+      const graphqlUsedRateLimit =
+        graphqlRateLimitResponse.rateLimit.limit -
+        graphqlRateLimitResponse.rateLimit.remaining;
+
+      logger.info(
+        `GitHub GraphQL rate limit: ${graphqlUsedRateLimit}/${graphqlRateLimitResponse.rateLimit.limit} used - resets at ${graphqlRateLimitResponse.rateLimit.resetAt}`,
+      );
+    }
   } catch (e) {
     logger.error(`Error checking GitHub rate limit: ${presentError(e)}`);
   }
@@ -34,6 +38,7 @@ export const presentError = (e: unknown): string => {
 };
 
 const actionErrorHandler = (error: Error): void => {
+  console.log(error);
   console.error([RED_ESCAPE_SEQUENCE, error.message, RESET_ESCAPE_SEQUENCE].join(''));
   process.exit(1);
 };

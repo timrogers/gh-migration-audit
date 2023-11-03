@@ -40,6 +40,7 @@ describe('auditRepository', () => {
       repo: 'repo',
       logger,
       auditors: AUDITORS,
+      gitHubEnterpriseServerVersion: undefined,
     });
 
     expect(warnings).toEqual([
@@ -83,6 +84,7 @@ describe('auditRepositories', () => {
       nameWithOwners,
       logger,
       auditors: AUDITORS,
+      gitHubEnterpriseServerVersion: undefined,
     });
 
     expect(warnings).toEqual([

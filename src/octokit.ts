@@ -38,6 +38,9 @@ export const createOctokit = (
     auth: token,
     baseUrl,
     request: { fetch: fetch || customFetch },
+    retry: {
+      enabled: false,
+    },
     throttle: {
       onRateLimit: (retryAfter, options) => {
         const { method, url } = options as OnRateLimitOptions;
