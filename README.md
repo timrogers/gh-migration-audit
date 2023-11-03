@@ -102,7 +102,7 @@ gh migration-audit audit-repos \
     --access-token GITHUB_TOKEN \
     # The path to a input CSV file with a list of repos to audit. The file should have a header row with the columns `owner` and `name`, followed by a series of rows.
     --input-path input.csv \
-    # OPTIONAL: The path to write the audit result CSV to. Defaults to the specified owner followed by the current date and time, e.g. `monalisa_1698925405325.csv`.
+    # OPTIONAL: The path to write the audit result CSV to. Defaults to the "repos" followed by the current date and time, e.g. `repos_1698925405325.csv`.
     --output-path octocat.csv \
     # OPTIONAL: The base URL of the GitHub API, if you're migrating from a migration source other than GitHub.com.
     --base-url https://github.acme.inc/api/v3

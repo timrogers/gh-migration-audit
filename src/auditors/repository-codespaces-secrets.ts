@@ -1,19 +1,18 @@
-import type { Octokit } from 'octokit';
-
-import { AuditorWarning } from '../types';
+import { AuditorFunction, AuditorWarning } from '../types';
 import { pluralize } from '../utils';
 
 export const TYPE = 'repository-codespaces-secrets';
 
-export const auditor = async ({
+export const auditor: AuditorFunction = async ({
+  gitHubEnterpriseServerVersion,
   octokit,
   owner,
   repo,
-}: {
-  octokit: Octokit;
-  owner: string;
-  repo: string;
 }): Promise<AuditorWarning[]> => {
+  if (typeof gitHubEnterpriseServerVersion !== 'undefined') {
+    return [];
+  }
+
   const { data } = await octokit.rest.codespaces.listRepoSecrets({
     owner,
     repo,

@@ -3,9 +3,13 @@ const { combine, timestamp, printf, colorize } = winston.format;
 
 // TODO: Figure out how to make ESLint happy with this
 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-const format = printf(({ level, message, timestamp }): string => {
+const format = printf(({ level, message, timestamp, owner, repo }): string => {
   // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-  return `${timestamp} ${level}: ${message}`;
+  if (owner && repo) {
+    return `${timestamp} ${level} [${owner}/${repo}]: ${message}`;
+  } else {
+    return `${timestamp} ${level}: ${message}`;
+  }
 });
 
 const generateLoggerOptions = (verbose: boolean): winston.LoggerOptions => {
