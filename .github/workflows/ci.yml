@@ -1,18 +1,19 @@
-name: Push
+name: CI
 
-on: push
+on:
+  pull_request:
+    branches: [main]
+    tags: ['v*']
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
 
 jobs:
   test_and_lint:
     name: Test and lint
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-      actions: read
-      checks: write
 
     steps:
       - uses: actions/checkout@v4
@@ -24,20 +25,31 @@ jobs:
       - run: npm run lint
       - run: npm run test
 
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        if: always() && github.actor != 'dependabot[bot]'
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          check_name: Test Results
-          files: "test-results/jest/junit.xml"
-          report_individual_runs: true
-          deduplicate_classes_by_file_name: false
+      # Upload test results, coverage report and original event as artifacts
+      # So we can publish the results in a separate workflow
 
-      - name: Report Coverage
-        uses: ArtiomTr/jest-coverage-report-action@v2
-        if: always() && github.actor != 'dependabot[bot]'
-        continue-on-error: true
+      # DO NOT MERGE THESE TWO STEPS INTO ONE
+      # Upload are done in two different steps otherwise they will share the common base path
+      # and the artifacts structure will be odd. Since on the first step we uploads just a file
+      # it will be kept in the _root_ of the artifact, while the second step will upload directory structures
+      - name: Upload
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+            name: testfiles
+            retention-days: 1
+            path: ${{ github.event_path }}
+
+      - name: Upload
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+            name: testfiles
+            retention-days: 1
+            path: |
+              test-results/**
+              coverage/**
+
   package:
     name: Package binaries
     runs-on: ubuntu-latest
@@ -101,7 +113,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Create input CSV for audit-repos
-        run: | 
+        run: |
           echo "owner,name
           gh-migration-audit-sandbox,second-repo-with-actions-variables" > input.csv
       - name: Print input CSV
@@ -139,7 +151,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Create input CSV for audit-repos
-        run: | 
+        run: |
           echo "owner,name
           gh-migration-audit-sandbox,second-repo-with-actions-variables" > input.csv
       - name: Print input CSV
@@ -152,7 +164,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: linux-outputs
-          path: output      
+          path: output
   end_to_end_tests_windows:
     name: Run end to end tests (Windows)
     runs-on: windows-latest
@@ -175,7 +187,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Create input CSV for audit-repos
-        run: | 
+        run: |
           echo "owner,name
           gh-migration-audit-sandbox,second-repo-with-actions-variables" > input.csv
       - name: Print input CSV
@@ -188,12 +200,15 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: windows-outputs
-          path: output   
+          path: output
   create_release:
     name: Create release
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
-    needs: [end_to_end_tests_linux, end_to_end_tests_macos, end_to_end_tests_windows]    
+    needs: [end_to_end_tests_linux, end_to_end_tests_macos, end_to_end_tests_windows]
+
+    permissions:
+      contents: write
 
     steps:
       - name: Download Windows binary
