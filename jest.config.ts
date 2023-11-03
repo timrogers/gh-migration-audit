@@ -6,7 +6,7 @@ const config: Config.InitialOptions = {
     '^.+\\.tsx?$': 'ts-jest',
   },
   collectCoverage: true,
-  coverageReporters: ['json-summary', 'text', 'lcov'],
+  coverageReporters: ['json-summary', 'text', 'lcov', 'cobertura'],
   collectCoverageFrom: ['./src/**'],
   reporters: [
     'default',
