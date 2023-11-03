@@ -1,0 +1,199 @@
+name: End to End tests and release
+on:
+  workflow_run:
+    workflows:
+      - "CI"
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    name: Package binaries
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.0.0
+        with:
+          node-version: 18.x
+      - name: Install dependencies
+        run: npm ci
+      - name: Generate binaries for macOS, Linux and Windows
+        run: npm run package
+      - name: Rename macOS binary to conform to GitHub CLI extension rules
+        run: mv bin/migration-audit-macos bin/gh-migration-audit-darwin-amd64
+      - name: Rename Windows binary to conform to GitHub CLI extension rules
+        run: mv bin/migration-audit-win.exe bin/gh-migration-audit-windows-amd64.exe
+      - name: Rename Linux binary to conform to GitHub CLI extension rules
+        run: mv bin/migration-audit-linux bin/gh-migration-audit-linux-amd64
+      - name: Upload macOS binary as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: package-macos
+          path: bin/gh-migration-audit-darwin-amd64
+      - name: Upload Linux binary as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: package-linux
+          path: bin/gh-migration-audit-linux-amd64
+      - name: Upload Windows binary as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: package-windows
+          path: bin/gh-migration-audit-windows-amd64.exe
+
+  end_to_end_tests_macos:
+    name: Run end to end tests (macOS)
+    runs-on: macos-latest
+    needs: package
+
+    steps:
+      - name: Download macOS binary
+        uses: actions/download-artifact@v3
+        with:
+          name: package-macos
+          path: bin
+      - name: Create `output` directory
+        run: mkdir output
+      - name: Make macOS binary executable
+        run: chmod +x bin/gh-migration-audit-darwin-amd64
+      - name: Audit a single repo
+        run: ./bin/gh-migration-audit-darwin-amd64 audit-repo --owner gh-migration-audit-sandbox --repo second-repo-with-actions-variables --output-path output/audit-repo.csv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
+      - name: Audit repos owned by an organization
+        run: ./bin/gh-migration-audit-darwin-amd64 audit-all --owner gh-migration-audit-sandbox --output-path output/audit-all.csv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
+      - name: Create input CSV for audit-repos
+        run: |
+          echo "owner,name
+          gh-migration-audit-sandbox,second-repo-with-actions-variables" > input.csv
+      - name: Print input CSV
+        run: cat input.csv
+      - name: Audit specific repos from input CSV
+        run: ./bin/gh-migration-audit-darwin-amd64 audit-repos --input-path input.csv --output-path output/audit-repos.csv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
+      - name: Upload macOS binary as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos-outputs
+          path: output
+  end_to_end_tests_linux:
+    name: Run end to end tests (Linux)
+    runs-on: ubuntu-latest
+    needs: package
+
+    steps:
+      - name: Download Linux binary
+        uses: actions/download-artifact@v3
+        with:
+          name: package-linux
+          path: bin
+      - name: Create `output` directory
+        run: mkdir output
+      - name: Make Linux binary executable
+        run: chmod +x bin/gh-migration-audit-linux-amd64
+      - name: Audit a single repo
+        run: ./bin/gh-migration-audit-linux-amd64 audit-repo --owner gh-migration-audit-sandbox --repo second-repo-with-actions-variables --output-path output/audit-repo.csv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
+      - name: Audit repos owned by an organization
+        run: ./bin/gh-migration-audit-linux-amd64 audit-all --owner gh-migration-audit-sandbox --output-path output/audit-all.csv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
+      - name: Create input CSV for audit-repos
+        run: |
+          echo "owner,name
+          gh-migration-audit-sandbox,second-repo-with-actions-variables" > input.csv
+      - name: Print input CSV
+        run: cat input.csv
+      - name: Audit specific repos from input CSV
+        run: ./bin/gh-migration-audit-linux-amd64 audit-repos --input-path input.csv --output-path output/audit-repos.csv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
+      - name: Upload outputs as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: linux-outputs
+          path: output
+
+  end_to_end_tests_windows:
+    name: Run end to end tests (Windows)
+    runs-on: windows-latest
+    needs: package
+
+    steps:
+      - name: Download Windows binary
+        uses: actions/download-artifact@v3
+        with:
+          name: package-windows
+          path: bin
+      - name: Create `output` directory
+        run: mkdir output
+      - name: Audit a single repo
+        run: bin/gh-migration-audit-windows-amd64.exe audit-repo --owner gh-migration-audit-sandbox --repo second-repo-with-actions-variables --output-path output/audit-repo.csv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
+      - name: Audit repos owned by an organization
+        run: bin/gh-migration-audit-windows-amd64.exe audit-all --owner gh-migration-audit-sandbox --output-path output/audit-all.csv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
+      - name: Create input CSV for audit-repos
+        run: |
+          echo "owner,name
+          gh-migration-audit-sandbox,second-repo-with-actions-variables" > input.csv
+      - name: Print input CSV
+        run: cat input.csv
+      - name: Audit specific repos from input CSV
+        run: bin/gh-migration-audit-windows-amd64.exe audit-repos --input-path input.csv --output-path output/audit-repos.csv
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
+      - name: Upload outputs as artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows-outputs
+          path: output
+
+  create_release:
+    name: Create release
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    needs: [end_to_end_tests_linux, end_to_end_tests_macos, end_to_end_tests_windows]
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download Windows binary
+        uses: actions/download-artifact@v3
+        with:
+          name: package-windows
+          path: bin
+      - name: Download macOS binary
+        uses: actions/download-artifact@v3
+        with:
+          name: package-macos
+          path: bin
+      - name: Download Linux binary
+        uses: actions/download-artifact@v3
+        with:
+          name: package-linux
+          path: bin
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            bin/gh-migration-audit-darwin-amd64
+            bin/gh-migration-audit-linux-amd64
+            bin/gh-migration-audit-windows-amd64.exe
+          generate_release_notes: true
