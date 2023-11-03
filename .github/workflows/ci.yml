@@ -3,9 +3,9 @@ name: CI
 on:
   pull_request:
     branches: [main]
-    tags: ['v*']
   push:
     branches: [main]
+    tags: ['v*']
 
 permissions:
   contents: read
