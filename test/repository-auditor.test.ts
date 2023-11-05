@@ -3,7 +3,11 @@ import fetchMock from 'fetch-mock';
 import { Auditor } from '../src/types';
 import { createLogger } from '../src/logger';
 import { createOctokit } from '../src/octokit';
-import { auditRepositories, auditRepository, DEFAULT_AUDITORS } from '../src/repository-auditor';
+import {
+  auditRepositories,
+  auditRepository,
+  DEFAULT_AUDITORS,
+} from '../src/repository-auditor';
 import { buildRepository } from './helpers/repositories';
 
 const fakeAuditorWithNoWarnings: Auditor = {
@@ -20,7 +24,7 @@ const AUDITORS = [fakeAuditorWithNoWarnings, fakeAuditorWithWarnings];
 
 describe('DEFAULT_AUDITORS', () => {
   it('should contain auditors with unique TYPEs', () => {
-    const types = DEFAULT_AUDITORS.map(auditor => auditor.TYPE);
+    const types = DEFAULT_AUDITORS.map((auditor) => auditor.TYPE);
     const uniqueTypes = new Set(types);
 
     expect(types.length).toEqual(uniqueTypes.size);

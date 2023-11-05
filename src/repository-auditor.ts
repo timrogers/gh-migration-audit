@@ -30,6 +30,7 @@ import * as repositoryCustomProperties from './auditors/repository-custom-proper
 import * as repositoryTagProtectionRules from './auditors/repository-tag-protection-rules';
 import * as watchers from './auditors/watchers';
 import * as repositoryForks from './auditors/repository-forks';
+import * as gitSubmodules from './auditors/git-submodules';
 import { getRepositoryWithGraphql } from './repositories';
 import { presentError, wrapLogger } from './utils';
 
@@ -56,6 +57,7 @@ export const DEFAULT_AUDITORS: Auditor[] = [
   watchers,
   repositoryTagProtectionRules,
   repositoryForks,
+  gitSubmodules,
 ];
 
 export const auditRepositories = async ({
