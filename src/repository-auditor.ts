@@ -26,7 +26,10 @@ import * as repositoryDependabotAlerts from './auditors/repository-dependabot-al
 import * as repositoryActionsWorkflowRuns from './auditors/repository-actions-workflow-runs';
 import * as repositoryActionsSelfHostedRunners from './auditors/repository-actions-self-hosted-runners';
 import * as repoositorySecretScanningAlerts from './auditors/repository-secret-scanning-alerts';
+import * as repositoryCustomProperties from './auditors/repository-custom-properties';
+import * as repositoryTagProtectionRules from './auditors/repository-tag-protection-rules';
 import * as watchers from './auditors/watchers';
+import * as repositoryForks from './auditors/repository-forks';
 import { getRepositoryWithGraphql } from './repositories';
 import { presentError, wrapLogger } from './utils';
 
@@ -49,7 +52,10 @@ export const DEFAULT_AUDITORS: Auditor[] = [
   repositoryActionsWorkflowRuns,
   repositoryActionsSelfHostedRunners,
   repoositorySecretScanningAlerts,
+  repositoryCustomProperties,
   watchers,
+  repositoryTagProtectionRules,
+  repositoryForks,
 ];
 
 export const auditRepositories = async ({
