@@ -17,7 +17,7 @@ describe('repositoryCodeScanningAlerts', () => {
     expect(warnings).toEqual([
       {
         message:
-          'This repository has one or more Code Scanning alerts, which will not be migrated',
+          'This repository has one or more Code Scanning alerts, which will not be migrated.',
       },
     ]);
   });

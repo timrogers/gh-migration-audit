@@ -16,7 +16,7 @@ export const auditor: AuditorFunction = async ({
   if (data.length > 0) {
     return [
       {
-        message: `This repository has one or more Code Scanning analyses, which will not be migrated.`,
+        message: `This repository has one or more Code Scanning analyses, which will not be migrated`,
       },
     ];
   } else {
