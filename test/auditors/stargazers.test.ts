@@ -7,7 +7,7 @@ describe('stargazers', () => {
   it('returns a warning if there are stargazers', async () => {
     const fetch = fetchMock
       .sandbox()
-      .getOnce('https://api.github.com/repos/test/test/stargazers', [1, 2, 3]);
+      .getOnce('https://api.github.com/repos/test/test/stargazers?per_page=1', [1, 2, 3]);
 
     const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
     const warnings = await auditor(auditorArguments);
@@ -15,7 +15,7 @@ describe('stargazers', () => {
     expect(warnings).toEqual([
       {
         message:
-          '3 users have starred this repo. Stars will not be transferred as part of a migration.',
+          'One or more users have starred this repo. Stars will not be transferred as part of a migration.',
       },
     ]);
   });
@@ -23,7 +23,7 @@ describe('stargazers', () => {
   it("returns no warnings if there aren't any stargazers", async () => {
     const fetch = fetchMock
       .sandbox()
-      .getOnce('https://api.github.com/repos/test/test/stargazers', []);
+      .getOnce('https://api.github.com/repos/test/test/stargazers?per_page=1', []);
 
     const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
     const warnings = await auditor(auditorArguments);

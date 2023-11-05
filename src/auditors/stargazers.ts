@@ -1,7 +1,6 @@
 import type { Octokit } from 'octokit';
 
 import { AuditorWarning } from '../types';
-import { pluralize } from '../utils';
 
 export const TYPE = 'stargazers';
 
@@ -17,16 +16,13 @@ export const auditor = async ({
   const { data } = await octokit.rest.activity.listStargazersForRepo({
     owner,
     repo,
+    per_page: 1,
   });
 
   if (data.length > 0) {
     return [
       {
-        message: `${pluralize(
-          data.length,
-          'user has starred',
-          'users have starred',
-        )} this repo. Stars will not be transferred as part of a migration.`,
+        message: `One or more users have starred this repo. Stars will not be transferred as part of a migration.`,
       },
     ];
   } else {
