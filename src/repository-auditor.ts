@@ -20,9 +20,13 @@ import * as repositoryDeployKeys from './auditors/repository-deploykeys';
 import * as repositoryPackages from './auditors/repository-packages';
 import * as repositoryDeployments from './auditors/repository-deployments';
 import * as repositoryEnvironments from './auditors/repository-environments';
-import * as repositoryCodeScanningAnalyses from  './auditors/repository-code-scanning-analyses';
-import * as repositoryCodeScanningAlerts from  './auditors/repository-code-scanning-alerts';
+import * as repositoryCodeScanningAnalyses from './auditors/repository-code-scanning-analyses';
+import * as repositoryCodeScanningAlerts from './auditors/repository-code-scanning-alerts';
 import * as repositoryDependabotAlerts from './auditors/repository-dependabot-alerts';
+import * as repositoryActionsWorkflowRuns from './auditors/repository-actions-workflow-runs';
+import * as repositoryActionsSelfHostedRunners from './auditors/repository-actions-self-hosted-runners';
+import * as repoositorySecretScanningAlerts from './auditors/repository-secret-scanning-alerts';
+import * as watchers from './auditors/watchers';
 import { getRepositoryWithGraphql } from './repositories';
 import { presentError, wrapLogger } from './utils';
 
@@ -42,6 +46,10 @@ const DEFAULT_AUDITORS: Auditor[] = [
   repositoryCodeScanningAnalyses,
   repositoryCodeScanningAlerts,
   repositoryDependabotAlerts,
+  repositoryActionsWorkflowRuns,
+  repositoryActionsSelfHostedRunners,
+  repoositorySecretScanningAlerts,
+  watchers,
 ];
 
 export const auditRepositories = async ({
