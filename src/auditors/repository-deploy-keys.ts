@@ -1,7 +1,7 @@
 import { AuditorWarning, GraphqlRepository } from '../types';
 import { pluralize } from '../utils';
 
-export const TYPE = 'repository-deploykeys';
+export const TYPE = 'repository-deploy-keys';
 
 export const auditor = async ({
   graphqlRepository,

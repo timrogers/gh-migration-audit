@@ -1,8 +1,8 @@
 import { buildRepository } from '../helpers/repositories';
-import { auditor } from '../../src/auditors/repository-deploykeys';
+import { auditor } from '../../src/auditors/repository-deploy-keys';
 
-describe('repository-deploykeys', () => {
-  it('returns a warning if there is 1 deploy keys', async () => {
+describe('repository-deploy-keys', () => {
+  it('returns a warning if there is 1 deploy key', async () => {
     const graphqlRepository = buildRepository({ deployKeys: { totalCount: 1 } });
     const warnings = await auditor({ graphqlRepository });
 

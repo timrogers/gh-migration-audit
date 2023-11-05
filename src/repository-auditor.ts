@@ -16,7 +16,7 @@ import * as repositoryActionsVariables from './auditors/repository-actions-varia
 import * as repositoryActionsSecrets from './auditors/repository-actions-secrets';
 import * as repositoryCodespacesSecrets from './auditors/repository-codespaces-secrets';
 import * as repositoryDependabotSecrets from './auditors/repository-dependabot-secrets';
-import * as repositoryDeployKeys from './auditors/repository-deploykeys';
+import * as repositoryDeployKeys from './auditors/repository-deploy-keys';
 import * as repositoryPackages from './auditors/repository-packages';
 import * as repositoryDeployments from './auditors/repository-deployments';
 import * as repositoryEnvironments from './auditors/repository-environments';
