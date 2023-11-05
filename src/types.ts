@@ -6,6 +6,18 @@ export interface GraphqlRepository {
   discussions: {
     totalCount: number;
   };
+  deployKeys: {
+    totalCount: number;
+  };
+  packages: {
+    totalCount: number;
+  };
+  deployments: {
+    totalCount: number;
+  };
+  environments: {
+    totalCount: number;
+  };
 }
 
 export interface AuditorWarning {
