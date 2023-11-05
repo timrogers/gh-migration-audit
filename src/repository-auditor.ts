@@ -8,56 +8,56 @@ import {
   NameWithOwner,
   RepositoryAuditWarning,
 } from './types.js';
-import * as repositoryRulesets from './auditors/repository-rulesets';
-import * as repositoryDiscussions from './auditors/repository-discussions';
-import * as gitLfsObjects from './auditors/git-lfs-objects';
-import * as repositoryWebhooks from './auditors/repository-webhooks';
-import * as repositoryActionsVariables from './auditors/repository-actions-variables';
-import * as repositoryActionsSecrets from './auditors/repository-actions-secrets';
-import * as repositoryCodespacesSecrets from './auditors/repository-codespaces-secrets';
-import * as repositoryDependabotSecrets from './auditors/repository-dependabot-secrets';
-import * as repositoryDeployKeys from './auditors/repository-deploy-keys';
-import * as repositoryPackages from './auditors/repository-packages';
-import * as repositoryDeployments from './auditors/repository-deployments';
-import * as repositoryEnvironments from './auditors/repository-environments';
-import * as repositoryCodeScanningAnalyses from './auditors/repository-code-scanning-analyses';
-import * as repositoryCodeScanningAlerts from './auditors/repository-code-scanning-alerts';
-import * as repositoryDependabotAlerts from './auditors/repository-dependabot-alerts';
-import * as repositoryActionsWorkflowRuns from './auditors/repository-actions-workflow-runs';
-import * as repositoryActionsSelfHostedRunners from './auditors/repository-actions-self-hosted-runners';
-import * as repoositorySecretScanningAlerts from './auditors/repository-secret-scanning-alerts';
-import * as repositoryCustomProperties from './auditors/repository-custom-properties';
-import * as repositoryTagProtectionRules from './auditors/repository-tag-protection-rules';
-import * as watchers from './auditors/watchers';
-import * as repositoryForks from './auditors/repository-forks';
-import * as gitSubmodules from './auditors/git-submodules';
 import { getRepositoryWithGraphql } from './repositories';
 import { presentError, wrapLogger } from './utils';
+import * as gitLfsObjects from './auditors/git-lfs-objects';
+import * as gitSubmodules from './auditors/git-submodules';
+import * as repoositorySecretScanningAlerts from './auditors/repository-secret-scanning-alerts';
+import * as repositoryActionsSecrets from './auditors/repository-actions-secrets';
+import * as repositoryActionsSelfHostedRunners from './auditors/repository-actions-self-hosted-runners';
+import * as repositoryActionsVariables from './auditors/repository-actions-variables';
+import * as repositoryActionsWorkflowRuns from './auditors/repository-actions-workflow-runs';
+import * as repositoryCodeScanningAlerts from './auditors/repository-code-scanning-alerts';
+import * as repositoryCodeScanningAnalyses from './auditors/repository-code-scanning-analyses';
+import * as repositoryCodespacesSecrets from './auditors/repository-codespaces-secrets';
+import * as repositoryCustomProperties from './auditors/repository-custom-properties';
+import * as repositoryDependabotAlerts from './auditors/repository-dependabot-alerts';
+import * as repositoryDependabotSecrets from './auditors/repository-dependabot-secrets';
+import * as repositoryDeployKeys from './auditors/repository-deploy-keys';
+import * as repositoryDeployments from './auditors/repository-deployments';
+import * as repositoryDiscussions from './auditors/repository-discussions';
+import * as repositoryEnvironments from './auditors/repository-environments';
+import * as repositoryForks from './auditors/repository-forks';
+import * as repositoryPackages from './auditors/repository-packages';
+import * as repositoryRulesets from './auditors/repository-rulesets';
+import * as repositoryTagProtectionRules from './auditors/repository-tag-protection-rules';
+import * as repositoryWebhooks from './auditors/repository-webhooks';
+import * as watchers from './auditors/watchers';
 
 export const DEFAULT_AUDITORS: Auditor[] = [
-  repositoryRulesets,
-  repositoryDiscussions,
   gitLfsObjects,
-  repositoryWebhooks,
-  repositoryActionsVariables,
+  gitSubmodules,
+  repoositorySecretScanningAlerts,
   repositoryActionsSecrets,
+  repositoryActionsSelfHostedRunners,
+  repositoryActionsVariables,
+  repositoryActionsWorkflowRuns,
+  repositoryCodeScanningAlerts,
+  repositoryCodeScanningAnalyses,
   repositoryCodespacesSecrets,
+  repositoryCustomProperties,
+  repositoryDependabotAlerts,
   repositoryDependabotSecrets,
   repositoryDeployKeys,
-  repositoryPackages,
   repositoryDeployments,
+  repositoryDiscussions,
   repositoryEnvironments,
-  repositoryCodeScanningAnalyses,
-  repositoryCodeScanningAlerts,
-  repositoryDependabotAlerts,
-  repositoryActionsWorkflowRuns,
-  repositoryActionsSelfHostedRunners,
-  repoositorySecretScanningAlerts,
-  repositoryCustomProperties,
-  watchers,
-  repositoryTagProtectionRules,
   repositoryForks,
-  gitSubmodules,
+  repositoryPackages,
+  repositoryRulesets,
+  repositoryTagProtectionRules,
+  repositoryWebhooks,
+  watchers,
 ];
 
 export const auditRepositories = async ({
