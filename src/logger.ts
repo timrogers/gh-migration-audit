@@ -1,6 +1,8 @@
 import winston from 'winston';
 const { combine, timestamp, printf, colorize } = winston.format;
 
+import { Logger } from './types';
+
 // TODO: Figure out how to make ESLint happy with this
 // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
 const format = printf(({ level, message, timestamp, owner, repo }): string => {
@@ -19,5 +21,5 @@ const generateLoggerOptions = (verbose: boolean): winston.LoggerOptions => {
   };
 };
 
-export const createLogger = (verbose: boolean): winston.Logger =>
+export const createLogger = (verbose: boolean): Logger =>
   winston.createLogger(generateLoggerOptions(verbose));

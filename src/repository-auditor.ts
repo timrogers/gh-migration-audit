@@ -1,10 +1,10 @@
 import type { Octokit } from 'octokit';
-import winston from 'winston';
 
 import {
   Auditor,
   AuditWarning,
   GraphqlRepository,
+  Logger,
   NameWithOwner,
   RepositoryAuditWarning,
 } from './types.js';
@@ -21,7 +21,7 @@ import * as repositoryPackages from './auditors/repository-packages';
 import * as repositoryDeployments from './auditors/repository-deployments';
 import * as repositoryEnvironments from './auditors/repository-environments';
 import { getRepositoryWithGraphql } from './repositories';
-import { presentError } from './utils';
+import { presentError, wrapLogger } from './utils';
 
 const DEFAULT_AUDITORS: Auditor[] = [
   repositoryRulesets,
@@ -47,7 +47,7 @@ export const auditRepositories = async ({
 }: {
   octokit: Octokit;
   nameWithOwners: NameWithOwner[];
-  logger: winston.Logger;
+  logger: Logger;
   auditors?: Auditor[];
   gitHubEnterpriseServerVersion: string | undefined;
 }): Promise<AuditWarning[]> => {
@@ -82,7 +82,7 @@ export const auditRepository = async ({
   octokit: Octokit;
   owner: string;
   repo: string;
-  logger: winston.Logger;
+  logger: Logger;
   auditors?: Auditor[];
   gitHubEnterpriseServerVersion: string | undefined;
 }): Promise<RepositoryAuditWarning[]> => {
@@ -116,10 +116,12 @@ const runAuditor = async (
   owner: string,
   repo: string,
   graphqlRepository: GraphqlRepository,
-  logger: winston.Logger,
+  logger: Logger,
   gitHubEnterpriseServerVersion: string | undefined,
 ): Promise<RepositoryAuditWarning[]> => {
-  logger.debug(`Running auditor ${auditor.TYPE}`, { owner, repo });
+  const repositoryLogger = wrapLogger(logger, owner, repo);
+
+  repositoryLogger.debug(`Running auditor ${auditor.TYPE}`);
 
   try {
     const warnings = await auditor.auditor({
@@ -128,15 +130,14 @@ const runAuditor = async (
       owner,
       repo,
       gitHubEnterpriseServerVersion,
-      logger,
+      logger: repositoryLogger,
     });
     return warnings.map((auditorWarning) => ({ ...auditorWarning, type: auditor.TYPE }));
   } catch (e) {
-    logger.error(
+    repositoryLogger.error(
       `Auditor \`${auditor.TYPE}\` failed for ${owner}/${repo} with error: ${presentError(
         e,
       )}`,
-      { owner, repo },
     );
     return [];
   }

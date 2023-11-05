@@ -24,7 +24,6 @@ export const auditor = async ({
     if (error.status && error.status == 500) {
       logger.warn(
         'Unable to check for Actions secrets because the REST API returned `500 Internal Server Error`. This usually means that Actions is turned off.',
-        { owner, repo },
       );
       return [];
     } else {

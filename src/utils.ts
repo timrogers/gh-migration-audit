@@ -1,13 +1,14 @@
 import { type Octokit } from 'octokit';
 import { RequestError } from '@octokit/request-error';
 import { GraphqlResponseError } from '@octokit/graphql';
-import type winston from 'winston';
+
+import { Logger } from './types';
 
 const RED_ESCAPE_SEQUENCE = '\x1b[31m';
 const RESET_ESCAPE_SEQUENCE = '\x1b[0m';
 
 export const logRateLimitInformation = async (
-  logger: winston.Logger,
+  logger: Logger,
   octokit: Octokit,
 ): Promise<void> => {
   try {
@@ -58,3 +59,19 @@ export const pluralize = (
   [includeCount ? count.toString() : null, count == 1 ? singular : plural]
     .filter((x) => x)
     .join(' ');
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type LoggerFn = (message: string, ...meta: any[]) => unknown;
+
+const wrapLoggerFn =
+  (fn: LoggerFn, owner: string, repo: string): LoggerFn =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (message: string, meta: any[]) =>
+    fn(message, { ...meta, owner, repo });
+
+export const wrapLogger = (logger: Logger, owner: string, repo: string): Logger => ({
+  debug: wrapLoggerFn(logger.debug, owner, repo),
+  info: wrapLoggerFn(logger.info, owner, repo),
+  warn: wrapLoggerFn(logger.warn, owner, repo),
+  error: wrapLoggerFn(logger.warn, owner, repo),
+});
