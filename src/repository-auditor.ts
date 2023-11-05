@@ -20,6 +20,9 @@ import * as repositoryDeployKeys from './auditors/repository-deploykeys';
 import * as repositoryPackages from './auditors/repository-packages';
 import * as repositoryDeployments from './auditors/repository-deployments';
 import * as repositoryEnvironments from './auditors/repository-environments';
+import * as repositoryCodeScanningAnalyses from  './auditors/repository-code-scanning-analyses';
+import * as repositoryCodeScanningAlerts from  './auditors/repository-code-scanning-alerts';
+import * as repositoryDependabotAlerts from './auditors/repository-dependabot-alerts';
 import { getRepositoryWithGraphql } from './repositories';
 import { presentError, wrapLogger } from './utils';
 
@@ -36,6 +39,9 @@ const DEFAULT_AUDITORS: Auditor[] = [
   repositoryPackages,
   repositoryDeployments,
   repositoryEnvironments,
+  repositoryCodeScanningAnalyses,
+  repositoryCodeScanningAlerts,
+  repositoryDependabotAlerts,
 ];
 
 export const auditRepositories = async ({
