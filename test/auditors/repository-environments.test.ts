@@ -19,7 +19,8 @@ describe('repository-deploykeys', () => {
 
     expect(warnings).toEqual([
       {
-        message: 'There are 3 environments on this repository, which will not be migrated',
+        message:
+          'There are 3 environments on this repository, which will not be migrated',
       },
     ]);
   });
