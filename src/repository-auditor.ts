@@ -30,7 +30,7 @@ import * as watchers from './auditors/watchers';
 import { getRepositoryWithGraphql } from './repositories';
 import { presentError, wrapLogger } from './utils';
 
-const DEFAULT_AUDITORS: Auditor[] = [
+export const DEFAULT_AUDITORS: Auditor[] = [
   repositoryRulesets,
   repositoryDiscussions,
   gitLfsObjects,
