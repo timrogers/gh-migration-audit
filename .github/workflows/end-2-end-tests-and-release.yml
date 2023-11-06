@@ -20,12 +20,12 @@ jobs:
         uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e
         with:
            run_id: ${{ github.event.workflow_run.id }}
-           path: .
+           path: testfiles
 
       - name: set ref
         id: gh_ref
         run: |
-          ref=$(cat artifacts/REF)
+          ref=$(cat testfiles/REF)
           echo "ref=$ref" >> "$GITHUB_OUTPUT"
 
       - name: Checkout
