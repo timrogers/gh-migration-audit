@@ -10,7 +10,7 @@ const RESET_ESCAPE_SEQUENCE = '\x1b[0m';
 export const logRateLimitInformation = async (
   logger: Logger,
   octokit: Octokit,
-): Promise<void> => {
+): Promise<boolean> => {
   try {
     const restRateLimitResponse = await octokit.rest.rateLimit.get();
     const restResetsAt = new Date(restRateLimitResponse.data.rate.reset * 1_000);
@@ -31,8 +31,16 @@ export const logRateLimitInformation = async (
     logger.info(
       `GitHub GraphQL rate limit: ${graphqlUsedRateLimit}/${graphqlRateLimitResponse.rateLimit.limit} used - resets at ${graphqlRateLimitResponse.rateLimit.resetAt}`,
     );
+
+    return true;
   } catch (e) {
-    logger.error(`Error checking GitHub rate limit: ${presentError(e)}`);
+    if (e instanceof RequestError && e.message === 'Rate limiting not enabled') {
+      logger.info(`GitHub rate limit is disabled.`);
+      return false;
+    } else {
+      logger.error(`Error checking GitHub rate limit: ${presentError(e)}`);
+      return true;
+    }
   }
 };
 

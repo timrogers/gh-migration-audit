@@ -94,11 +94,13 @@ command
       const logger = createLogger(verbose);
       const octokit = createOctokit(accessToken, baseUrl, proxyUrl, logger);
 
-      void logRateLimitInformation(logger, octokit);
+      const shouldCheckRateLimitAgain = await logRateLimitInformation(logger, octokit);
 
-      setInterval(() => {
-        void logRateLimitInformation(logger, octokit);
-      }, 30_000);
+      if (shouldCheckRateLimitAgain) {
+        setInterval(() => {
+          void logRateLimitInformation(logger, octokit);
+        }, 30_000);
+      }
 
       const { isGitHubEnterpriseServer, gitHubEnterpriseServerVersion } =
         await getGitHubProductInformation(octokit);
