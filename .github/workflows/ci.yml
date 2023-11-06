@@ -30,8 +30,8 @@ jobs:
       - name: write ref
         run: echo -n '${{ github.ref }}' >> REF        
 
-      # DO NOT MERGE THESE TWO STEPS INTO ONE
-      # Upload are done in two different steps otherwise they will share the common base path
+      # DO NOT MERGE THESE THREE STEPS INTO ONE
+      # Upload are done in three different steps otherwise they will share the common base path
       # and the artifacts structure will be odd. Since on the first step we uploads just a file
       # it will be kept in the _root_ of the artifact, while the second step will upload directory structures
       - name: Upload
@@ -48,9 +48,7 @@ jobs:
         with:
             name: testfiles
             retention-days: 1
-            path: |
-              ${{ github.event_path }}
-              REF
+            path: ${{ github.event_path }}
 
       - name: Upload
         if: always()
