@@ -41,4 +41,23 @@ describe('repository-secret-scanning-alerts', () => {
 
     expect(warnings.length).toEqual(0);
   });
+
+  it('returns no warnings if the "no analysis found" error is returned because Secret Scanning is not enabled', async () => {
+    const fetch = fetchMock
+      .sandbox()
+      .getOnce(
+        'https://api.github.com/repos/test/test/secret-scanning/alerts?per_page=1',
+        {
+          status: 400,
+          body: {
+            message: 'Secret scanning is disabled on this repository.',
+          },
+        },
+      );
+
+    const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
+    const warnings = await auditor(auditorArguments);
+
+    expect(warnings).toEqual([]);
+  });
 });

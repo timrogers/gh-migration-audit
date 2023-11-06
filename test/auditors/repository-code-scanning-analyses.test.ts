@@ -36,4 +36,23 @@ describe('repositoryCodeScanningAnalyses', () => {
 
     expect(warnings).toEqual([]);
   });
+
+  it('returns no warnings if the "no analysis found" error is returned because Code Scanning is not enabled', async () => {
+    const fetch = fetchMock
+      .sandbox()
+      .getOnce(
+        'https://api.github.com/repos/test/test/code-scanning/analyses?per_page=1',
+        {
+          status: 400,
+          body: {
+            message: 'no analysis found',
+          },
+        },
+      );
+
+    const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
+    const warnings = await auditor(auditorArguments);
+
+    expect(warnings).toEqual([]);
+  });
 });
