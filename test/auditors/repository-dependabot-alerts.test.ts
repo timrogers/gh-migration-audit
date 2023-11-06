@@ -33,6 +33,22 @@ describe('repositoryDependabotAlerts', () => {
     expect(warnings).toEqual([]);
   });
 
+  it('returns no warnings if Dependabot alerts are disabled for the repo', async () => {
+    const fetch = fetchMock
+      .sandbox()
+      .getOnce('https://api.github.com/repos/test/test/dependabot/alerts?per_page=1', {
+        status: 400,
+        body: {
+          message: 'Dependabot alerts are disabled for this repository.',
+        },
+      });
+
+    const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
+    const warnings = await auditor(auditorArguments);
+
+    expect(warnings).toEqual([]);
+  });
+
   it('no-ops if running against GitHub Enterprise Server <3.8', async () => {
     const auditorArguments = buildAuditorArguments({
       gitHubEnterpriseServerVersion: '3.7.3',
