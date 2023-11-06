@@ -27,8 +27,10 @@ jobs:
 
       # Upload test results, coverage report and original event as artifacts
       # So we can publish the results in a separate workflow
-      - name: write ref
-        run: echo -n '${{ github.ref }}' >> REF        
+      - name: write ref and SHA
+        run: |
+          echo -n '${{ github.ref }}' >> REF
+          echo -n '${{ github.sha }}' >> SHA
 
       # DO NOT MERGE THESE THREE STEPS INTO ONE
       # Upload are done in three different steps otherwise they will share the common base path

@@ -14,6 +14,9 @@ jobs:
     name: Package binaries
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    outputs:
+      ref: ${{ steps.gh_ref.outputs.ref }}
+      sha: ${{ steps.gh_ref.outputs.sha }}
 
     steps:
       - name: Download and Extract Test Artifacts
@@ -28,10 +31,12 @@ jobs:
           ls -la testfiles
           ref=$(cat testfiles/REF)
           echo "ref=$ref" >> "$GITHUB_OUTPUT"
+          sha=$(cat testfiles/REF)
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
-      - name: Checkout
+      - name: Checkout ${{ steps.gh_ref.outputs.ref }}
         uses: actions/checkout@v4
-        with:          
+        with:
           fetch-depth: 0
           ref: ${{ steps.gh_ref.outputs.ref }}
           persist-credentials: false
@@ -69,6 +74,7 @@ jobs:
     name: Run end to end tests (macOS)
     runs-on: macos-latest
     needs: package
+    if: false
 
     steps:
       - name: Download macOS binary
@@ -142,10 +148,19 @@ jobs:
           name: linux-outputs
           path: output
 
+      - uses: LouisBrunner/checks-action@v1.3.1
+        id: check
+        with:
+          sha: ${{ needs.package.outputs.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: TODO
+          status: ${{ job.status }}
+
   end_to_end_tests_windows:
     name: Run end to end tests (Windows)
     runs-on: windows-latest
     needs: package
+    if: false
 
     steps:
       - name: Download Windows binary
