@@ -68,4 +68,20 @@ describe('repositoryCodeScanningAlerts', () => {
 
     expect(warnings).toEqual([]);
   });
+
+  it('returns no warnings if the "no default branch found" error is returned', async () => {
+    const fetch = fetchMock
+      .sandbox()
+      .getOnce('https://api.github.com/repos/test/test/code-scanning/alerts?per_page=1', {
+        status: 400,
+        body: {
+          message: 'no default branch found',
+        },
+      });
+
+    const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
+    const warnings = await auditor(auditorArguments);
+
+    expect(warnings).toEqual([]);
+  });
 });
