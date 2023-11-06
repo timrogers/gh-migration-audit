@@ -39,4 +39,18 @@ describe('repositoryActionsSelfHostedRunners', () => {
 
     expect(warnings.length).toEqual(0);
   });
+
+  it('returns no warnings if the API returns 404 because Actions is disabled', async () => {
+    const fetch = fetchMock
+      .sandbox()
+      .getOnce('https://api.github.com/repos/test/test/actions/runners?per_page=1', 404);
+
+    const auditorArguments = buildAuditorArguments({
+      fetchMock: fetch,
+    });
+
+    const warnings = await auditor(auditorArguments);
+
+    expect(warnings.length).toEqual(0);
+  });
 });
