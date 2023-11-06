@@ -1,4 +1,4 @@
-import type { Octokit, RequestError } from 'octokit';
+import { Octokit, RequestError } from 'octokit';
 
 import { AuditorWarning } from '../types';
 
@@ -22,7 +22,7 @@ export const auditor = async ({
       path: '.gitattributes',
     });
   } catch (error) {
-    if ((error as RequestError).status === 404) {
+    if (error instanceof RequestError && error.status === 404) {
       return [];
     } else {
       throw error;

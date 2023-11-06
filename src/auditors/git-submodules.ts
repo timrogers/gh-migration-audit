@@ -1,4 +1,4 @@
-import type { Octokit, RequestError } from 'octokit';
+import { Octokit, RequestError } from 'octokit';
 
 import { AuditorWarning } from '../types';
 
@@ -20,7 +20,7 @@ export const auditor = async ({
       path: '.gitmodules',
     });
   } catch (error) {
-    if ((error as RequestError).status === 404) {
+    if (error instanceof RequestError && error.status === 404) {
       // There is no .gitmodules file, so this repository doesn't seem to use submodules
       return [];
     } else {

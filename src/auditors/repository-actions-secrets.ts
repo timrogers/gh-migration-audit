@@ -1,3 +1,4 @@
+import { RequestError } from 'octokit';
 import { AuditorFunctionArgs, AuditorWarning } from '../types';
 import { pluralize } from '../utils';
 
@@ -20,8 +21,8 @@ export const auditor = async ({
 
     data = response.data;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    if (error.status && error.status == 500) {
+  } catch (error) {
+    if (error instanceof RequestError && error.status == 500) {
       logger.warn(
         'Unable to check for Actions secrets because the REST API returned `500 Internal Server Error`. This usually means that Actions is turned off.',
       );
