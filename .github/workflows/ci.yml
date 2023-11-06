@@ -31,7 +31,11 @@ jobs:
       - name: write ref and SHA
         run: |
           echo -n '${{ github.ref }}' >> REF
-          echo -n '${{ github.sha }}' >> SHA
+          if [ '${{ github.event_name}} =='pull_request' ]; then
+            echo -n '${{ github.event.pull_request.head.sha}}'
+          else
+            echo -n '${{ github.sha }}' >> SHA
+          fi
 
       # DO NOT MERGE THESE THREE STEPS INTO ONE
       # Upload are done in three different steps otherwise they will share the common base path
