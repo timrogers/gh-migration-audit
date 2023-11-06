@@ -51,4 +51,21 @@ describe('repositoryCodeScanningAlerts', () => {
 
     expect(warnings).toEqual([]);
   });
+
+  it('returns no warnings if the "Advanced Security must be enabled for this repository to use code scanning." error is returned', async () => {
+    const fetch = fetchMock
+      .sandbox()
+      .getOnce('https://api.github.com/repos/test/test/code-scanning/alerts?per_page=1', {
+        status: 400,
+        body: {
+          message:
+            'Advanced Security must be enabled for this repository to use code scanning.',
+        },
+      });
+
+    const auditorArguments = buildAuditorArguments({ fetchMock: fetch });
+    const warnings = await auditor(auditorArguments);
+
+    expect(warnings).toEqual([]);
+  });
 });

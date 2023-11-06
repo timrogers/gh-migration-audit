@@ -3,6 +3,11 @@ import { AuditorFunction, AuditorWarning } from '../types';
 
 export const TYPE = 'repository-code-scanning-analyses';
 
+const CODE_SCANNING_DISABLED_MESSAGES = [
+  'Advanced Security must be enabled for this repository to use code scanning.',
+  'no analysis found',
+];
+
 export const auditor: AuditorFunction = async ({
   octokit,
   owner,
@@ -25,7 +30,10 @@ export const auditor: AuditorFunction = async ({
       return [];
     }
   } catch (e) {
-    if (e instanceof RequestError && e.message === 'no analysis found') {
+    if (
+      e instanceof RequestError &&
+      CODE_SCANNING_DISABLED_MESSAGES.includes(e.message)
+    ) {
       return [];
     } else {
       throw e;
