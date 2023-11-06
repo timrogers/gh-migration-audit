@@ -31,7 +31,7 @@ jobs:
       - name: write ref and SHA
         run: |
           echo -n '${{ github.ref }}' >> REF
-          if [ '${{ github.event_name}} =='pull_request' ]; then
+          if [ '${{ github.event_name}}' =='pull_request' ]; then
             echo -n '${{ github.event.pull_request.head.sha}}'
           else
             echo -n '${{ github.sha }}' >> SHA
