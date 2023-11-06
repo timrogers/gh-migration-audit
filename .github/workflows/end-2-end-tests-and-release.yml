@@ -25,6 +25,7 @@ jobs:
       - name: set ref
         id: gh_ref
         run: |
+          ls -la testfiles
           ref=$(cat testfiles/REF)
           echo "ref=$ref" >> "$GITHUB_OUTPUT"
 
