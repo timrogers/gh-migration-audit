@@ -155,7 +155,7 @@ jobs:
           sha: ${{ needs.package.outputs.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
           name: TODO
-          status: ${{ job.status }}
+          conclusion: ${{ job.status }}
 
   end_to_end_tests_windows:
     name: Run end to end tests (Windows)
