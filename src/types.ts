@@ -1,5 +1,4 @@
 import type { Octokit } from 'octokit';
-import winston from 'winston';
 
 export interface GraphqlRepository {
   id: string;
@@ -47,7 +46,7 @@ export type AuditorFunctionArgs = {
   owner: string;
   repo: string;
   gitHubEnterpriseServerVersion: string | undefined;
-  logger: winston.Logger;
+  logger: Logger;
 };
 
 export type AuditorFunction = ({
@@ -62,4 +61,15 @@ export type AuditorFunction = ({
 export interface Auditor {
   TYPE: string;
   auditor: AuditorFunction;
+}
+
+export interface Logger {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  debug: (message: string, meta?: any) => unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  info: (message: string, meta?: any) => unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  warn: (message: string, meta?: any) => unknown;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  error: (message: string, meta?: any) => unknown;
 }

@@ -7,7 +7,7 @@ import {
 import { Octokit } from 'octokit';
 import { paginateGraphql } from '@octokit/plugin-paginate-graphql';
 import { throttling } from '@octokit/plugin-throttling';
-import winston from 'winston';
+import { Logger } from './types';
 
 const OctokitWithPlugins = Octokit.plugin(paginateGraphql).plugin(throttling);
 
@@ -20,7 +20,7 @@ export const createOctokit = (
   token: string,
   baseUrl: string,
   proxyUrl: string | undefined,
-  logger: winston.Logger,
+  logger: Logger,
   // We allow `any` here because we want to be able to pass in a mocked version of `fetch` -
   // plus this `any` aligns with Octokit's typings.
   //
@@ -38,6 +38,7 @@ export const createOctokit = (
     auth: token,
     baseUrl,
     request: { fetch: fetch || customFetch },
+    log: logger,
     retry: {
       enabled: false,
     },
