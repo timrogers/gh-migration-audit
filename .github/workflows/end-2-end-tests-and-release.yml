@@ -32,7 +32,7 @@ jobs:
           ls -la testfiles
           ref=$(cat testfiles/REF)
           echo "ref=$ref" >> "$GITHUB_OUTPUT"
-          sha=$(cat testfiles/REF)
+          sha=$(cat testfiles/SHA)
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
 
       - name: Checkout ${{ steps.gh_ref.outputs.ref }}
@@ -149,7 +149,7 @@ jobs:
           name: linux-outputs
           path: output
 
-      - uses: LouisBrunner/checks-action@v1.3.1
+      - uses: LouisBrunner/checks-action@c6dbaea4f9c79ccfe67c038acddaf713518b255d
         id: check
         if: always()
         with:
