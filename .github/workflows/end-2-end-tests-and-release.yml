@@ -16,10 +16,24 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
+      - name: Download and Extract Test Artifacts
+        uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e
+        with:
+           run_id: ${{ github.event.workflow_run.id }}
+           path: .
+
+      - name: set ref
+        id: gh_ref
+        run: |
+          ref=$(cat artifacts/REF)
+          echo "ref=$ref" >> "$GITHUB_OUTPUT"
+
       - name: Checkout
         uses: actions/checkout@v4
-        with:
+        with:          
           fetch-depth: 0
+          ref: ${{ steps.gh_ref.outputs.ref }}
+          persist-credentials: false
       - name: Setup Node.js
         uses: actions/setup-node@v4.0.0
         with:
