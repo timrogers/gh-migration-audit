@@ -10,17 +10,32 @@ You can use this tool to identify data that will be lost, or which you'll need t
 
 The results from audits with this tool are non-exhaustive - they won't identify every possible kind of data loss from a migration - but the goal is to get you 95% of the way there.
 
-## What unmigratable data can this tool detect?
+## What unmigratable repository data can this tool detect?
 
+- Actions secrets
+- Actions variables
+- Code Scanning alerts
+- Code Scanning analyses
+- Codespaces secrets
+- Custom properties
+- Dependabot alerts
+- Dependabot secrets
+- Deploy keys
+- Deployments
+- Discussions
+- Environments
+- Forks
 - Git LFS objects
-- Repository Actions secrets
-- Repository Actions variables
-- Repository Codespaces secrets
-- Repisitory Dependabot secrets
-- Repository discussions
-- Repository rulesets
-- Repository webhooks
+- Git submodules
+- Packages
+- Rulesets
+- Secret Scanning alerts
+- Self-hosted runners
 - Stars
+- Tag protection rules
+- Watchers
+- Webhooks
+- Workflow runs
 
 ## Installation 
 
