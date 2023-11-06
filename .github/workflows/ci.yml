@@ -42,7 +42,9 @@ jobs:
         with:
             name: testfiles
             retention-days: 1
-            path: REF
+            path: |
+              REF
+              SHA
 
       - name: Upload
         if: always()
