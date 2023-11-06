@@ -150,6 +150,7 @@ jobs:
 
       - uses: LouisBrunner/checks-action@v1.3.1
         id: check
+        if: always()
         with:
           sha: ${{ needs.package.outputs.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
