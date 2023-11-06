@@ -64,3 +64,13 @@ jobs:
               test-results/**
               coverage/**
 
+      - uses: LouisBrunner/checks-action@c6dbaea4f9c79ccfe67c038acddaf713518b255d
+        id: check
+        if: always()
+        with:
+          sha: ${{ github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: DUMMY FROM CI
+          conclusion: ${{ job.status }}
+      
+
