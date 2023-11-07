@@ -25,6 +25,7 @@ export const getRepositoryWithGraphql = async ({
         packages { totalCount }
         deployments { totalCount }
         environments { totalCount }
+        pinnedIssues { totalCount }
       }
     }`,
     {
