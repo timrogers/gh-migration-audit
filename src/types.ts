@@ -17,6 +17,9 @@ export interface GraphqlRepository {
   environments: {
     totalCount: number;
   };
+  pinnedIssues: {
+    totalCount: number;
+  };
 }
 
 export interface AuditorWarning {
