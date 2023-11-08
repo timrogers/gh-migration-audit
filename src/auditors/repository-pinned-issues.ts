@@ -20,7 +20,17 @@ export const auditor = async ({
           graphqlRepository.pinnedIssues.totalCount,
           'pinned issue',
           'pinned issues',
-        )} on this repository. The ${pluralize(graphqlRepository.pinnedIssues.totalCount, 'issue', 'issues', false)} will be migrated, but ${pluralize(graphqlRepository.pinnedIssues.totalCount, 'it', 'they', false)} will not remain pinned.`,
+        )} on this repository. The ${pluralize(
+          graphqlRepository.pinnedIssues.totalCount,
+          'issue',
+          'issues',
+          false,
+        )} will be migrated, but ${pluralize(
+          graphqlRepository.pinnedIssues.totalCount,
+          'it',
+          'they',
+          false,
+        )} will not remain pinned.`,
       },
     ];
   } else {
