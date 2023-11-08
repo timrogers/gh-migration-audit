@@ -9,7 +9,7 @@ describe('repository-pinned-issues', () => {
     expect(warnings).toEqual([
       {
         message:
-          'There is 1 pinned issue on this repository, while the issues are migrated the pinning will not',
+          'There is 1 pinned issue on this repository. The issue will be migrated, but it will not remain pinned.',
       },
     ]);
   });
@@ -21,7 +21,7 @@ describe('repository-pinned-issues', () => {
     expect(warnings).toEqual([
       {
         message:
-          'There are 5 pinned issues on this repository, while the issues are migrated the pinning will not',
+          'There are 5 pinned issues on this repository. The issues will be migrated, but they will not remain pinned.',
       },
     ]);
   });
