@@ -20,6 +20,9 @@ export const buildRepository = (
     environments: {
       totalCount: 0,
     },
+    pinnedIssues: {
+      totalCount: 0,
+    },
     ...overrides,
   };
 };

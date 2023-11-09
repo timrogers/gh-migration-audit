@@ -33,6 +33,7 @@ import * as repositoryRulesets from './auditors/repository-rulesets';
 import * as repositoryTagProtectionRules from './auditors/repository-tag-protection-rules';
 import * as repositoryWebhooks from './auditors/repository-webhooks';
 import * as watchers from './auditors/watchers';
+import * as repositoryPinnedIssues from './auditors/repository-pinned-issues';
 
 export const DEFAULT_AUDITORS: Auditor[] = [
   gitLfsObjects,
@@ -58,6 +59,7 @@ export const DEFAULT_AUDITORS: Auditor[] = [
   repositoryTagProtectionRules,
   repositoryWebhooks,
   watchers,
+  repositoryPinnedIssues,
 ];
 
 export const auditRepositories = async ({
