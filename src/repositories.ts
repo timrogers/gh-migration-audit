@@ -21,6 +21,7 @@ export const getRepositoryWithGraphql = async ({
         discussions(first: 1) {
           totalCount
         }
+        diskUsage
         deployKeys {totalCount }
         packages { totalCount }
         deployments { totalCount }

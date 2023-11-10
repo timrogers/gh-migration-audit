@@ -27,6 +27,7 @@ import * as repositoryDependabotSecrets from './auditors/repository-dependabot-s
 import * as repositoryDeployKeys from './auditors/repository-deploy-keys';
 import * as repositoryDeployments from './auditors/repository-deployments';
 import * as repositoryDiscussions from './auditors/repository-discussions';
+import * as repositoryDiskUsage from './auditors/repository-disk-usage';
 import * as repositoryEnvironments from './auditors/repository-environments';
 import * as repositoryForks from './auditors/repository-forks';
 import * as repositoryPackages from './auditors/repository-packages';
@@ -54,6 +55,7 @@ export const DEFAULT_AUDITORS: Auditor[] = [
   repositoryDeployKeys,
   repositoryDeployments,
   repositoryDiscussions,
+  repositoryDiskUsage,
   repositoryEnvironments,
   repositoryForks,
   repositoryPackages,

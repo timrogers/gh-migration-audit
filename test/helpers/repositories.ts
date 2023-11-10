@@ -14,6 +14,7 @@ export const buildRepository = (
     deployments: {
       totalCount: 0,
     },
+    diskUsage: 1_337_000,
     packages: {
       totalCount: 0,
     },

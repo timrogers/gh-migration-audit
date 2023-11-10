@@ -5,6 +5,7 @@ export interface GraphqlRepository {
   discussions: {
     totalCount: number;
   };
+  diskUsage: number;
   deployKeys: {
     totalCount: number;
   };
