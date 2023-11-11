@@ -16,7 +16,7 @@ const config: Config.InitialOptions = {
         outputDirectory: 'test-results/jest',
       },
     ],
-  ]
+  ],
 };
 
 export default config;
