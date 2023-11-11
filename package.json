@@ -21,6 +21,7 @@
     "chalk": "^5.3.0",
     "commander": "^11.1.0",
     "csv-stringify": "^6.4.4",
+    "filesize": "^10.1.0",
     "octokit": "^3.1.1",
     "semver": "^7.5.4",
     "undici": "^5.27.2",

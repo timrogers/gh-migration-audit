@@ -16,6 +16,7 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 - Actions variables
 - Code Scanning alerts
 - Code Scanning analyses
+- Code Scanning [default setup](https://docs.github.com/en/code-security/code-scanning/enabling-code-scanning/configuring-default-setup-for-code-scanning)
 - Codespaces secrets
 - Custom properties
 - Dependabot alerts
@@ -28,6 +29,7 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 - Git LFS objects
 - Git submodules
 - Packages
+- Pinned issues
 - Rulesets
 - Secret Scanning alerts
 - Self-hosted runners
@@ -36,6 +38,8 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 - Watchers
 - Webhooks
 - Workflow runs
+
+It will also warn you if your repository is large (over 1GB), and may be slow or difficult to migrate.
 
 ## Installation 
 
