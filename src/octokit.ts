@@ -4,7 +4,7 @@ import {
   RequestInfo as undiciRequestInfo,
   RequestInit as undiciRequestInit,
 } from 'undici';
-import { Octokit } from 'octokit';
+import { Octokit, RequestError } from 'octokit';
 import { paginateGraphql } from '@octokit/plugin-paginate-graphql';
 import { throttling } from '@octokit/plugin-throttling';
 import { Logger } from './types';
@@ -34,11 +34,10 @@ export const createOctokit = (
     });
   };
 
-  return new OctokitWithPlugins({
+  const octokit = new OctokitWithPlugins({
     auth: token,
     baseUrl,
     request: { fetch: fetch || customFetch },
-    log: logger,
     retry: {
       enabled: false,
     },
@@ -63,4 +62,22 @@ export const createOctokit = (
       },
     },
   });
+
+  octokit.hook.after('request', async (response, options) => {
+    logger.debug(`${options.method} ${options.url}: ${response.status}`);
+  });
+
+  octokit.hook.error('request', async (error, options) => {
+    if (error instanceof RequestError) {
+      logger.debug(
+        `${options.method} ${options.url}: ${error.status} - ${error.message}`,
+      );
+    } else {
+      logger.debug(`${options.method} ${options.url}: ${error.name} - ${error.message}`);
+    }
+
+    throw error;
+  });
+
+  return octokit;
 };
