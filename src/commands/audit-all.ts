@@ -61,7 +61,6 @@ command
   .option(
     '--access-token <access_token>',
     'The access token used to interact with the GitHub API. This can also be set using the GITHUB_TOKEN environment variable.',
-    process.env.GITHUB_TOKEN,
   )
   .option(
     '--base-url <base_url>',
@@ -89,7 +88,16 @@ command
   .option('--verbose', 'Whether to emit detailed, verbose logs', false)
   .action(
     actionRunner(async (opts: Arguments) => {
-      const { accessToken, baseUrl, owner, ownerType, proxyUrl, verbose } = opts;
+      const {
+        accessToken: accessTokenFromArguments,
+        baseUrl,
+        owner,
+        ownerType,
+        proxyUrl,
+        verbose,
+      } = opts;
+
+      const accessToken = accessTokenFromArguments || process.env.GITHUB_TOKEN;
 
       if (!accessToken) {
         throw new Error(
