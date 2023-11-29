@@ -34,7 +34,7 @@ export const logRateLimitInformation = async (
 
     return true;
   } catch (e) {
-    if (e instanceof RequestError && e.message === 'Rate limiting not enabled') {
+    if (e instanceof RequestError && e.message === 'Rate limiting is not enabled.') {
       logger.info(`GitHub rate limit is disabled.`);
       return false;
     } else {
