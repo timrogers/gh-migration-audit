@@ -4,7 +4,7 @@ A [GitHub CLI](https://cli.github.com/) [extension](https://cli.github.com/manua
 
 You can use this tool to identify data that will be lost, or which you'll need to migrate manually, when migrating:
 
-* from GitHub Enterprise Server (GHES) v3.6 onwards to GitHub Enterprise Cloud (GHEC)
+* from GitHub Enterprise Server (GHES) v3.7 onwards to GitHub Enterprise Cloud (GHEC)
 * from GitHub Enterprise Cloud (GHEC) to GitHub Enterprise Server (GHES)
 * between tenants on GitHub.com (e.g. from a normal GitHub.com account to an [Enterprise Managed Users](https://docs.github.com/en/enterprise-cloud@latest/admin/identity-and-access-management/using-enterprise-managed-users-for-iam/about-enterprise-managed-users) organization)
 
@@ -149,4 +149,4 @@ If you identify a piece of data that isn't automatically migrated which isn't de
 1. Update your new auditor to check for unmigratable data and return a warning if there is data which can't be migrated. You may be able to use GraphQL data from step 2, or you can make a fresh API request from your auditor using the `octokit`, `owner` and `repo` passed to the function. 
 1. Write a unit test for your auditor in `test/auditors`, using an existing one as a template.
 1. Update `DEFAULT_AUDITORS` in `src/repository-auditor.ts`, importing and adding the auditor you created
-1. Create a pull request with your changes, including evidence of your functional testing to make sure the auditor works on. If possible, please also test with the oldest supported GitHub Enterprise Server version (v3.6).
+1. Create a pull request with your changes, including evidence of your functional testing to make sure the auditor works on. If possible, please also test with the oldest supported GitHub Enterprise Server version (v3.7).
