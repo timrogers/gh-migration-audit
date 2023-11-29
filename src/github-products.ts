@@ -12,7 +12,7 @@ type GhesMetaResponse = DotcomMetaResponse & {
   };
 };
 
-export const MINIMUM_SUPPORTED_GITHUB_ENTERPRISE_SERVER_VERSION = '3.6.0';
+export const MINIMUM_SUPPORTED_GITHUB_ENTERPRISE_SERVER_VERSION = '3.7.0';
 
 export const isSupportedGitHubEnterpriseServerVersion = (version: string) =>
   semver.gte(version, MINIMUM_SUPPORTED_GITHUB_ENTERPRISE_SERVER_VERSION);
