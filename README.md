@@ -137,6 +137,16 @@ gh migration-audit audit-repos \
 
 The tool will audit all of the repos, and then write a CSV file to the `--output-path` with the results.
 
+## GitHub Enterprise Server (GHES) support
+
+This tool works with GitHub Enterprise Server, and __supports all [GitHub Enterprise Server versions](https://docs.github.com/en/enterprise-server/admin/all-releases) currently supported by GitHub__. GitHub Enterprise Server versions are supported for approximately a year from release. 
+
+At the time of writing, the earliest supported version of GitHub Enterprise Server is 3.7. When running against GitHub Enterprise Server, the tool will check that the version is supported.
+
+You may be able to run audits against an older GitHub Enterprise Server version with an older version of `gh-migration-audit`:
+
+- To run audits against GitHub Enterprise Server 3.6, use v0.4.1 or earlier
+
 ## Contributing
 
 ### Adding a new auditor
