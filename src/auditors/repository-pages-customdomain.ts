@@ -27,7 +27,7 @@ export const auditor: AuditorFunction = async ({
   if (pages.cname != null) {
     return [
       {
-        message: `This repository has a custom domain specified. The pages settings will be migrated but not the custom domain (cname) configuration.`,
+        message: `This repository has a custom domain specified for GitHub Pages. The Pages settings will be migrated, but not the custom domain (CNAME) configuration.`,
       },
     ];
   } else {
