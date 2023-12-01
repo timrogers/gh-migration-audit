@@ -29,6 +29,7 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 - Git LFS objects
 - Git submodules
 - Packages
+- Pages custom domain configuration
 - Pinned issues
 - Rulesets
 - Secret Scanning alerts
@@ -41,7 +42,7 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 
 It will also warn you if your repository is large (over 1GB), and may be slow or difficult to migrate.
 
-## Installation 
+## Installation
 
 Make sure you've got the [GitHub CLI](https://cli.github.com/) installed. If you haven't, you can install it by following the instructions [here](https://github.com/cli/cli#installation).
 
@@ -139,7 +140,7 @@ The tool will audit all of the repos, and then write a CSV file to the `--output
 
 ## GitHub Enterprise Server (GHES) support
 
-This tool works with GitHub Enterprise Server, and __supports all [GitHub Enterprise Server versions](https://docs.github.com/en/enterprise-server/admin/all-releases) currently supported by GitHub__. GitHub Enterprise Server versions are supported for approximately a year from release. 
+This tool works with GitHub Enterprise Server, and __supports all [GitHub Enterprise Server versions](https://docs.github.com/en/enterprise-server/admin/all-releases) currently supported by GitHub__. GitHub Enterprise Server versions are supported for approximately a year from release.
 
 At the time of writing, the earliest supported version of GitHub Enterprise Server is 3.7. When running against GitHub Enterprise Server, the tool will check that the version is supported.
 
@@ -156,7 +157,7 @@ If you identify a piece of data that isn't automatically migrated which isn't de
 1. Figure out how to detect the data that can't be migrated using GitHub's REST or GraphQL API
 1. If the data is returned on the `Repository` object in the GraphQL API, and that GraphQL query is supported across all supported GitHub Enterprise Server versions (>= 3.6), update the GraphQL query in `src/repositories.ts` to fetch that data, and then update the `GraphqlRepository` type in `src/types.ts` in line with the change
 1. Create a TypeScript file in `src/auditors` for your auditor, with a sensible name, copying an existing auditor. `repository-packages.ts` is a good one to use as a template for a simple auditor using GraphQL data. For a more complex example with GitHub Enterprise Server version checks, logging, REST API requests and error handling, see `repository-dependabot-alerts.ts`.
-1. Update your new auditor to check for unmigratable data and return a warning if there is data which can't be migrated. You may be able to use GraphQL data from step 2, or you can make a fresh API request from your auditor using the `octokit`, `owner` and `repo` passed to the function. 
+1. Update your new auditor to check for unmigratable data and return a warning if there is data which can't be migrated. You may be able to use GraphQL data from step 2, or you can make a fresh API request from your auditor using the `octokit`, `owner` and `repo` passed to the function.
 1. Write a unit test for your auditor in `test/auditors`, using an existing one as a template.
 1. Update `DEFAULT_AUDITORS` in `src/repository-auditor.ts`, importing and adding the auditor you created
 1. Create a pull request with your changes, including evidence of your functional testing to make sure the auditor works on. If possible, please also test with the oldest supported GitHub Enterprise Server version (v3.7).
