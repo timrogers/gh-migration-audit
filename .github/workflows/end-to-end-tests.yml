@@ -30,11 +30,11 @@ jobs:
       - name: Make macOS binary executable
         run: chmod +x bin/gh-migration-audit-darwin-amd64
       - name: Audit a single repo
-        run: ./bin/gh-migration-audit-darwin-amd64 audit-repo --owner gh-migration-audit-sandbox --repo second-repo-with-actions-variables --output-path output/audit-repo.csv
+        run: ./bin/gh-migration-audit-darwin-amd64 audit-repo --owner gh-migration-audit-sandbox --repo second-repo-with-actions-variables --output-path output/audit-repo.csv --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Audit repos owned by an organization
-        run: ./bin/gh-migration-audit-darwin-amd64 audit-all --owner gh-migration-audit-sandbox --output-path output/audit-all.csv
+        run: ./bin/gh-migration-audit-darwin-amd64 audit-all --owner gh-migration-audit-sandbox --output-path output/audit-all.csv --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Create input CSV for audit-repos
@@ -44,7 +44,7 @@ jobs:
       - name: Print input CSV
         run: cat input.csv
       - name: Audit specific repos from input CSV
-        run: ./bin/gh-migration-audit-darwin-amd64 audit-repos --input-path input.csv --output-path output/audit-repos.csv
+        run: ./bin/gh-migration-audit-darwin-amd64 audit-repos --input-path input.csv --output-path output/audit-repos.csv --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Upload macOS binary as artifacts
@@ -79,11 +79,11 @@ jobs:
       - name: Make Linux binary executable
         run: chmod +x bin/gh-migration-audit-linux-amd64
       - name: Audit a single repo
-        run: ./bin/gh-migration-audit-linux-amd64 audit-repo --owner gh-migration-audit-sandbox --repo second-repo-with-actions-variables --output-path output/audit-repo.csv
+        run: ./bin/gh-migration-audit-linux-amd64 audit-repo --owner gh-migration-audit-sandbox --repo second-repo-with-actions-variables --output-path output/audit-repo.csv --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Audit repos owned by an organization
-        run: ./bin/gh-migration-audit-linux-amd64 audit-all --owner gh-migration-audit-sandbox --output-path output/audit-all.csv
+        run: ./bin/gh-migration-audit-linux-amd64 audit-all --owner gh-migration-audit-sandbox --output-path output/audit-all.csv --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Create input CSV for audit-repos
@@ -93,7 +93,7 @@ jobs:
       - name: Print input CSV
         run: cat input.csv
       - name: Audit specific repos from input CSV
-        run: ./bin/gh-migration-audit-linux-amd64 audit-repos --input-path input.csv --output-path output/audit-repos.csv
+        run: ./bin/gh-migration-audit-linux-amd64 audit-repos --input-path input.csv --output-path output/audit-repos.csv --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Upload outputs as artifacts
@@ -134,11 +134,11 @@ jobs:
       - name: Create `output` directory
         run: mkdir output
       - name: Audit a single repo
-        run: bin/gh-migration-audit-windows-amd64.exe audit-repo --owner gh-migration-audit-sandbox --repo second-repo-with-actions-variables --output-path output/audit-repo.csv
+        run: bin/gh-migration-audit-windows-amd64.exe audit-repo --owner gh-migration-audit-sandbox --repo second-repo-with-actions-variables --output-path output/audit-repo.csv --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Audit repos owned by an organization
-        run: bin/gh-migration-audit-windows-amd64.exe audit-all --owner gh-migration-audit-sandbox --output-path output/audit-all.csv
+        run: bin/gh-migration-audit-windows-amd64.exe audit-all --owner gh-migration-audit-sandbox --output-path output/audit-all.csv --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Create input CSV for audit-repos
@@ -148,7 +148,7 @@ jobs:
       - name: Print input CSV
         run: cat input.csv
       - name: Audit specific repos from input CSV
-        run: bin/gh-migration-audit-windows-amd64.exe audit-repos --input-path input.csv --output-path output/audit-repos.csv
+        run: bin/gh-migration-audit-windows-amd64.exe audit-repos --input-path input.csv --output-path output/audit-repos.csv --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GH_MIGRATION_AUDIT_SANDBOX_TOKEN }}
       - name: Upload outputs as artifacts
@@ -183,11 +183,11 @@ jobs:
       - name: Make Linux binary executable
         run: chmod +x bin/gh-migration-audit-linux-amd64
       - name: Audit a single repo
-        run: ./bin/gh-migration-audit-linux-amd64 audit-repo --owner gh-migration-audit-sandbox --repo second-repo-with-actions-variables --output-path output/audit-repo.csv --base-url ${{ secrets.GHES_BASE_URL }}
+        run: ./bin/gh-migration-audit-linux-amd64 audit-repo --owner gh-migration-audit-sandbox --repo second-repo-with-actions-variables --output-path output/audit-repo.csv --base-url ${{ secrets.GHES_BASE_URL }} --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GHES_TOKEN }}
       - name: Audit repos owned by an organization
-        run: ./bin/gh-migration-audit-linux-amd64 audit-all --owner gh-migration-audit-sandbox --output-path output/audit-all.csv --base-url ${{ secrets.GHES_BASE_URL }}
+        run: ./bin/gh-migration-audit-linux-amd64 audit-all --owner gh-migration-audit-sandbox --output-path output/audit-all.csv --base-url ${{ secrets.GHES_BASE_URL }} --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GHES_TOKEN }}
       - name: Create input CSV for audit-repos
@@ -197,7 +197,7 @@ jobs:
       - name: Print input CSV
         run: cat input.csv
       - name: Audit specific repos from input CSV
-        run: ./bin/gh-migration-audit-linux-amd64 audit-repos --input-path input.csv --output-path output/audit-repos.csv --base-url ${{ secrets.GHES_BASE_URL }}
+        run: ./bin/gh-migration-audit-linux-amd64 audit-repos --input-path input.csv --output-path output/audit-repos.csv --base-url ${{ secrets.GHES_BASE_URL }} --disable-telemetry
         env:
           GITHUB_TOKEN: ${{ secrets.GHES_TOKEN }}
       - name: Upload outputs as artifacts

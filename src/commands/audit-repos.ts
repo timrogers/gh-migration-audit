@@ -2,6 +2,8 @@ import * as commander from 'commander';
 import { createReadStream, existsSync, writeFileSync } from 'fs';
 import { stringify } from 'csv-stringify';
 import { parse } from '@fast-csv/parse';
+import { PostHog } from 'posthog-node';
+import crypto from 'crypto';
 
 import { actionRunner, logRateLimitInformation, pluralize } from '../utils';
 import VERSION from '../version';
@@ -14,12 +16,14 @@ import {
   getGitHubProductInformation,
   isSupportedGitHubEnterpriseServerVersion,
 } from '../github-products';
+import { POSTHOG_API_KEY, POSTHOG_HOST } from '../posthog';
 
 const command = new commander.Command();
 
 interface Arguments {
   accessToken?: string;
   baseUrl: string;
+  disableTelemetry: boolean;
   inputPath: string;
   outputPath: string | undefined;
   proxyUrl: string | undefined;
@@ -110,11 +114,17 @@ command
     process.env.PROXY_URL,
   )
   .option('--verbose', 'Whether to emit detailed, verbose logs', false)
+  .option(
+    '--disable-telemetry',
+    'Disable anonymous telemetry that gives the maintainers of this tool basic information about real-world usage. For more detailed information about the built-in telemetry, see the readme at https://github.com/timrogers/gh-migration-audit.',
+    false,
+  )
   .action(
     actionRunner(async (opts: Arguments) => {
       const {
         accessToken: accessTokenFromArguments,
         baseUrl,
+        disableTelemetry,
         inputPath,
         proxyUrl,
         verbose,
@@ -178,6 +188,20 @@ command
         logger.info('Running in GitHub.com mode...');
       }
 
+      const posthog = new PostHog(POSTHOG_API_KEY, { host: POSTHOG_HOST });
+
+      if (!disableTelemetry) {
+        posthog.capture({
+          distinctId: crypto.randomUUID(),
+          event: 'audit_repos_start',
+          properties: {
+            github_enterprise_server_version: gitHubEnterpriseServerVersion,
+            is_github_enterprise_server: isGitHubEnterpriseServer,
+            version: VERSION,
+          },
+        });
+      }
+
       const warnings = await auditRepositories({
         octokit,
         logger,
@@ -188,6 +212,7 @@ command
       await writeWarningsToCsv(warnings, outputPath);
 
       logger.info(`Successfully wrote audit CSV to ${outputPath}`);
+      await posthog.shutdownAsync();
       process.exit(0);
     }),
   );

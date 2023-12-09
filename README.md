@@ -75,7 +75,9 @@ gh migration-audit audit-repo \
     # OPTIONAL: The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.
     --proxy-url https://10.0.0.1:3128 \
     # OPTIONAL: Whether to emit detailed, verbose logs
-    --verbose
+    --verbose \
+    # OPTIONAL: Disable anonymous telemetry that gives the maintainers of this tool basic information about real-world usage
+    --disable-telemetry
 ```
 
 The tool will audit your repo, and then write a CSV file to the `--output-path` with the results.
@@ -101,7 +103,9 @@ gh migration-audit audit-all \
     # OPTIONAL: The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.
     --proxy-url https://10.0.0.1:3128 \
     # OPTIONAL: Whether to emit detailed, verbose logs
-    --verbose
+    --verbose \
+    # OPTIONAL: Disable anonymous telemetry that gives the maintainers of this tool basic information about real-world usage
+    --disable-telemetry
 ```
 
 The tool will audit all of the repos, and then write a CSV file to the `--output-path` with the results.
@@ -133,7 +137,9 @@ gh migration-audit audit-repos \
     # OPTIONAL: The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.
     --proxy-url https://10.0.0.1:3128 \
     # OPTIONAL: Whether to emit detailed, verbose logs
-    --verbose
+    --verbose \
+    # OPTIONAL: Disable anonymous telemetry that gives the maintainers of this tool basic information about real-world usage
+    --disable-telemetry
 ```
 
 The tool will audit all of the repos, and then write a CSV file to the `--output-path` with the results.
@@ -161,3 +167,13 @@ If you identify a piece of data that isn't automatically migrated which isn't de
 1. Write a unit test for your auditor in `test/auditors`, using an existing one as a template.
 1. Update `DEFAULT_AUDITORS` in `src/repository-auditor.ts`, importing and adding the auditor you created
 1. Create a pull request with your changes, including evidence of your functional testing to make sure the auditor works on. If possible, please also test with the oldest supported GitHub Enterprise Server version (v3.7).
+
+## Telemetry
+
+This extension includes basic, anonymous telemetry to give the maintainers information about real-world usage. This data is limited to:
+
+- The number of executions of each command
+- The versions of GitHub Enterprise Server being used
+- The versions of the extension currently in use
+
+You can disable all telemetry by specifying the `--disable-telemetry` argument.
