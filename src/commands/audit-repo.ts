@@ -1,6 +1,8 @@
 import * as commander from 'commander';
+import crypto from 'crypto';
 import { existsSync, writeFileSync } from 'fs';
 import { stringify } from 'csv-stringify';
+import { PostHog } from 'posthog-node';
 
 import { actionRunner, logRateLimitInformation } from '../utils';
 import VERSION from '../version';
@@ -13,12 +15,14 @@ import {
   getGitHubProductInformation,
   isSupportedGitHubEnterpriseServerVersion,
 } from '../github-products';
+import { POSTHOG_API_KEY, POSTHOG_HOST } from '../posthog';
 
 const command = new commander.Command();
 
 interface Arguments {
   accessToken?: string;
   baseUrl: string;
+  disableTelemetry: boolean;
   outputPath: string | undefined;
   owner: string;
   repo: string;
@@ -72,11 +76,17 @@ command
     process.env.PROXY_URL,
   )
   .option('--verbose', 'Whether to emit detailed, verbose logs', false)
+  .option(
+    '--disable-telemetry',
+    'Disable anonymous telemetry that gives the maintainers of this tool basic information about real-world usage. For more detailed information about the built-in telemetry, see the readme at https://github.com/timrogers/gh-migration-audit.',
+    false,
+  )
   .action(
     actionRunner(async (opts: Arguments) => {
       const {
         accessToken: accessTokenFromArguments,
         baseUrl,
+        disableTelemetry,
         owner,
         repo,
         proxyUrl,
@@ -127,6 +137,20 @@ command
         logger.info('Running in GitHub.com mode...');
       }
 
+      const posthog = new PostHog(POSTHOG_API_KEY, { host: POSTHOG_HOST });
+
+      if (!disableTelemetry) {
+        posthog.capture({
+          distinctId: crypto.randomUUID(),
+          event: 'audit_repo_start',
+          properties: {
+            github_enterprise_server_version: gitHubEnterpriseServerVersion,
+            is_github_enterprise_server: isGitHubEnterpriseServer,
+            version: VERSION,
+          },
+        });
+      }
+
       logger.info(`Auditing ${owner}/${repo}...`);
 
       const warnings = await auditRepository({
@@ -139,6 +163,7 @@ command
       await writeWarningsToCsv(warnings, outputPath);
 
       logger.info(`Successfully wrote audit CSV to ${outputPath}`);
+      await posthog.shutdownAsync();
       process.exit(0);
     }),
   );
