@@ -4,7 +4,12 @@ import { stringify } from 'csv-stringify';
 import crypto from 'crypto';
 import { PostHog } from 'posthog-node';
 
-import { actionRunner, logRateLimitInformation, pluralize } from '../utils';
+import {
+  actionRunner,
+  checkForUpdates,
+  logRateLimitInformation,
+  pluralize,
+} from '../utils';
 import VERSION from '../version';
 import { createLogger } from '../logger';
 import { createOctokit } from '../octokit';
@@ -28,6 +33,7 @@ interface Arguments {
   owner: string;
   ownerType: OwnerType;
   proxyUrl: string | undefined;
+  skipUpdateCheck: boolean;
   verbose: boolean;
 }
 
@@ -95,6 +101,7 @@ command
     'Disable anonymous telemetry that gives the maintainers of this tool basic information about real-world usage. For more detailed information about the built-in telemetry, see the readme at https://github.com/timrogers/gh-migration-audit.',
     false,
   )
+  .option('--skip-update-check', 'Skip automatic check for updates to this tool', false)
   .action(
     actionRunner(async (opts: Arguments) => {
       const {
@@ -104,8 +111,13 @@ command
         owner,
         ownerType,
         proxyUrl,
+        skipUpdateCheck,
         verbose,
       } = opts;
+
+      const logger = createLogger(verbose);
+
+      if (!skipUpdateCheck) checkForUpdates(proxyUrl, logger);
 
       const accessToken = accessTokenFromArguments || process.env.GITHUB_TOKEN;
 
@@ -123,7 +135,6 @@ command
         );
       }
 
-      const logger = createLogger(verbose);
       const octokit = createOctokit(accessToken, baseUrl, proxyUrl, logger);
 
       const shouldCheckRateLimitAgain = await logRateLimitInformation(logger, octokit);

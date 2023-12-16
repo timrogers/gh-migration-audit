@@ -1,11 +1,40 @@
 import { type Octokit } from 'octokit';
 import { RequestError } from '@octokit/request-error';
 import { GraphqlResponseError } from '@octokit/graphql';
+import semver from 'semver';
 
 import { Logger } from './types';
+import { createOctokit } from './octokit';
+import VERSION from './version';
 
 const RED_ESCAPE_SEQUENCE = '\x1b[31m';
 const RESET_ESCAPE_SEQUENCE = '\x1b[0m';
+
+export const checkForUpdates = async (
+  proxyUrl: string | undefined,
+  logger: Logger,
+): Promise<void> => {
+  const octokit = createOctokit(undefined, 'https://api.github.com', proxyUrl, logger);
+
+  try {
+    const { data: release } = await octokit.rest.repos.getLatestRelease({
+      owner: 'timrogers',
+      repo: 'gh-migration-audit',
+    });
+
+    if (semver.gt(release.tag_name, VERSION)) {
+      logger.warn(
+        `The version of gh-migration-audit you're running, v${VERSION}, is out of date. You can update to the latest version, ${release.tag_name} by running \`gh extension upgrade timrogers/gh-migration-audit\`.`,
+      );
+    } else {
+      logger.info(
+        `You are running the latest version of gh-migration-audit, v${VERSION}.`,
+      );
+    }
+  } catch (e) {
+    logger.error(`Error checking for updates: ${presentError(e)}`);
+  }
+};
 
 export const logRateLimitInformation = async (
   logger: Logger,
