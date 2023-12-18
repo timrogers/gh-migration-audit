@@ -34,7 +34,7 @@ jobs:
       # it will be kept in the _root_ of the artifact, while the second step will upload directory structures
       - name: Upload Event
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
             name: testfiles
             retention-days: 1
@@ -42,9 +42,9 @@ jobs:
 
       - name: Upload Test Results and Coverage
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-            name: testfiles
+            name: test-results-and-coverage
             retention-days: 1
             path: |
               test-results/**
@@ -74,17 +74,17 @@ jobs:
       - name: Rename Linux binary to conform to GitHub CLI extension rules
         run: mv bin/migration-audit-linux bin/gh-migration-audit-linux-amd64
       - name: Upload macOS binary as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: package-macos
           path: bin/gh-migration-audit-darwin-amd64
       - name: Upload Linux binary as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: package-linux
           path: bin/gh-migration-audit-linux-amd64
       - name: Upload Windows binary as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: package-windows
           path: bin/gh-migration-audit-windows-amd64.exe
