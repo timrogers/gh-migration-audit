@@ -77,7 +77,9 @@ gh migration-audit audit-repo \
     # OPTIONAL: Whether to emit detailed, verbose logs
     --verbose \
     # OPTIONAL: Disable anonymous telemetry that gives the maintainers of this tool basic information about real-world usage
-    --disable-telemetry
+    --disable-telemetry \
+    # OPTIONAL: Skip automatic check for updates to this tool
+    --skip-update-check
 ```
 
 The tool will audit your repo, and then write a CSV file to the `--output-path` with the results.
@@ -105,7 +107,9 @@ gh migration-audit audit-all \
     # OPTIONAL: Whether to emit detailed, verbose logs
     --verbose \
     # OPTIONAL: Disable anonymous telemetry that gives the maintainers of this tool basic information about real-world usage
-    --disable-telemetry
+    --disable-telemetry \
+    # OPTIONAL: Skip automatic check for updates to this tool
+    --skip-update-check
 ```
 
 The tool will audit all of the repos, and then write a CSV file to the `--output-path` with the results.
@@ -139,7 +143,9 @@ gh migration-audit audit-repos \
     # OPTIONAL: Whether to emit detailed, verbose logs
     --verbose \
     # OPTIONAL: Disable anonymous telemetry that gives the maintainers of this tool basic information about real-world usage
-    --disable-telemetry
+    --disable-telemetry \
+    # OPTIONAL: Skip automatic check for updates to this tool
+    --skip-update-check
 ```
 
 The tool will audit all of the repos, and then write a CSV file to the `--output-path` with the results.

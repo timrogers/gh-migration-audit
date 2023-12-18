@@ -17,7 +17,7 @@ interface OnRateLimitOptions {
 }
 
 export const createOctokit = (
-  token: string,
+  token: string | undefined,
   baseUrl: string,
   proxyUrl: string | undefined,
   logger: Logger,
