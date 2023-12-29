@@ -52,6 +52,13 @@ jobs:
         with:
           name: macos-outputs
           path: output
+      - name: Upload event as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: macos_github_com_event
+            retention-days: 1
+            path: ${{ github.event_path }}
       - name: Set Status Check
         uses: LouisBrunner/checks-action@c6dbaea4f9c79ccfe67c038acddaf713518b255d
         if: always()
@@ -101,14 +108,13 @@ jobs:
         with:
           name: linux-outputs
           path: output
-      - name: Upload
+      - name: Upload event as artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-            name: dbg
+            name: linux_github_com_event
             retention-days: 1
             path: ${{ github.event_path }}
-
       - name: Set Status Check
         uses: LouisBrunner/checks-action@c6dbaea4f9c79ccfe67c038acddaf713518b255d
         if: always()
@@ -156,6 +162,13 @@ jobs:
         with:
           name: windows-outputs
           path: output
+      - name: Upload event as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+            name: windows_github_com_event
+            retention-days: 1
+            path: ${{ github.event_path }}
       - name: Set Status Check
         uses: LouisBrunner/checks-action@c6dbaea4f9c79ccfe67c038acddaf713518b255d
         if: always()
@@ -205,14 +218,13 @@ jobs:
         with:
           name: linux-github-enterprise-server-outputs
           path: output
-      - name: Upload
+      - name: Upload event as artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
-            name: dbg
+            name: linux_ghes_event
             retention-days: 1
             path: ${{ github.event_path }}
-
       - name: Set Status Check
         uses: LouisBrunner/checks-action@c6dbaea4f9c79ccfe67c038acddaf713518b255d
         if: always()
