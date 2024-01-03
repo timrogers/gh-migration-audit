@@ -32,6 +32,7 @@ import * as repositoryEnvironments from './auditors/repository-environments';
 import * as repositoryForks from './auditors/repository-forks';
 import * as repositoryPackages from './auditors/repository-packages';
 import * as repositoryPagesCustomDomain from './auditors/repository-pages-customdomain';
+import * as repositoryReleases from './auditors/repository-releases';
 import * as repositoryRulesets from './auditors/repository-rulesets';
 import * as repositoryTagProtectionRules from './auditors/repository-tag-protection-rules';
 import * as repositoryWebhooks from './auditors/repository-webhooks';
@@ -61,6 +62,7 @@ export const DEFAULT_AUDITORS: Auditor[] = [
   repositoryForks,
   repositoryPackages,
   repositoryPagesCustomDomain,
+  repositoryReleases,
   repositoryRulesets,
   repositoryTagProtectionRules,
   repositoryWebhooks,
