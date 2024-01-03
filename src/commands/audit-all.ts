@@ -181,7 +181,7 @@ command
       const repoNames: string[] = [];
 
       if (ownerType === OwnerType.Organization) {
-        const iterator = octokit.paginate.iterator(octokit.rest.repos.listForOrg, {
+        const iterator = octokit.paginate.iterator('GET /orgs/{org}/repos', {
           org: owner,
         });
 
@@ -191,7 +191,7 @@ command
           }
         }
       } else {
-        const iterator = octokit.paginate.iterator(octokit.rest.repos.listForUser, {
+        const iterator = octokit.paginate.iterator('GET /users/{username}/repos', {
           username: owner,
         });
 
