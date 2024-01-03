@@ -1,6 +1,6 @@
 {
   "name": "gh-migration-audit",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "type": "module",
   "description": "Audits GitHub repositories to highlight data that cannot be automatically migrated using GitHub's migration tools",
   "homepage": "https://github.com/timrogers/gh-migration-audit",
