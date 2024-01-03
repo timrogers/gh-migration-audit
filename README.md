@@ -31,6 +31,7 @@ The results from audits with this tool are non-exhaustive - they won't identify 
 - Packages
 - Pages custom domain configuration
 - Pinned issues
+- Release assets which are too large
 - Rulesets
 - Secret Scanning alerts
 - Self-hosted runners
