@@ -60,7 +60,7 @@ jobs:
             retention-days: 1
             path: ${{ github.event_path }}
       - name: Set Status Check
-        uses: LouisBrunner/checks-action@c6dbaea4f9c79ccfe67c038acddaf713518b255d
+        uses: LouisBrunner/checks-action@6b626ffbad7cc56fd58627f774b9067e6118af23
         if: always()
         with:
           sha: ${{ github.event.workflow_run.head_sha}}
@@ -116,7 +116,7 @@ jobs:
             retention-days: 1
             path: ${{ github.event_path }}
       - name: Set Status Check
-        uses: LouisBrunner/checks-action@c6dbaea4f9c79ccfe67c038acddaf713518b255d
+        uses: LouisBrunner/checks-action@6b626ffbad7cc56fd58627f774b9067e6118af23
         if: always()
         with:
           sha: ${{ github.event.workflow_run.head_sha}}
@@ -170,7 +170,7 @@ jobs:
             retention-days: 1
             path: ${{ github.event_path }}
       - name: Set Status Check
-        uses: LouisBrunner/checks-action@c6dbaea4f9c79ccfe67c038acddaf713518b255d
+        uses: LouisBrunner/checks-action@6b626ffbad7cc56fd58627f774b9067e6118af23
         if: always()
         with:
           sha: ${{ github.event.workflow_run.head_sha}}
@@ -226,7 +226,7 @@ jobs:
             retention-days: 1
             path: ${{ github.event_path }}
       - name: Set Status Check
-        uses: LouisBrunner/checks-action@c6dbaea4f9c79ccfe67c038acddaf713518b255d
+        uses: LouisBrunner/checks-action@6b626ffbad7cc56fd58627f774b9067e6118af23
         if: always()
         with:
           sha: ${{ github.event.workflow_run.head_sha}}
