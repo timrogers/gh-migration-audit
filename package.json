@@ -23,7 +23,7 @@
     "csv-stringify": "^6.4.5",
     "filesize": "^10.1.0",
     "octokit": "^3.1.2",
-    "posthog-node": "^3.6.2",
+    "posthog-node": "^3.6.3",
     "semver": "^7.6.0",
     "undici": "^6.6.2",
     "winston": "^3.11.0"
