@@ -1,6 +1,5 @@
 import { type Octokit } from 'octokit';
 import { RequestError } from '@octokit/request-error';
-import { GraphqlResponseError } from '@octokit/graphql';
 import semver from 'semver';
 
 import { Logger } from './types';
@@ -75,8 +74,7 @@ export const logRateLimitInformation = async (
 
 export const presentError = (e: unknown): string => {
   if (typeof e === 'string') return e;
-  if (e instanceof RequestError) return e.message;
-  if (e instanceof GraphqlResponseError) return e.message;
+  if (e instanceof Error) return e.message;
   return JSON.stringify(e);
 };
 
