@@ -223,7 +223,7 @@ command
       await writeWarningsToCsv(warnings, outputPath);
 
       logger.info(`Successfully wrote audit CSV to ${outputPath}`);
-      await posthog.shutdownAsync();
+      await posthog.shutdown();
       process.exit(0);
     }),
   );
