@@ -162,19 +162,20 @@ command
         logger.info('Running in GitHub.com mode...');
       }
 
-      const posthog = new PostHog(POSTHOG_API_KEY, { host: POSTHOG_HOST });
+      const posthog = new PostHog(POSTHOG_API_KEY, {
+        disabled: disableTelemetry,
+        host: POSTHOG_HOST,
+      });
 
-      if (!disableTelemetry) {
-        posthog.capture({
-          distinctId: crypto.randomUUID(),
-          event: 'audit_all_start',
-          properties: {
-            github_enterprise_server_version: gitHubEnterpriseServerVersion,
-            is_github_enterprise_server: isGitHubEnterpriseServer,
-            version: VERSION,
-          },
-        });
-      }
+      posthog.capture({
+        distinctId: crypto.randomUUID(),
+        event: 'audit_all_start',
+        properties: {
+          github_enterprise_server_version: gitHubEnterpriseServerVersion,
+          is_github_enterprise_server: isGitHubEnterpriseServer,
+          version: VERSION,
+        },
+      });
 
       logger.info(`Identifying all repos owned by ${owner}...`);
 
