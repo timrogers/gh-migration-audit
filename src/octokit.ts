@@ -37,7 +37,7 @@ export const createOctokit = (
   const octokit = new OctokitWithPlugins({
     auth: token,
     baseUrl,
-    request: { fetch: fetch || customFetch },
+    request: fetch || customFetch,
     retry: {
       enabled: false,
     },
