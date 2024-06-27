@@ -109,6 +109,8 @@ gh migration-audit audit-all \
     --verbose \
     # OPTIONAL: Disable anonymous telemetry that gives the maintainers of this tool basic information about real-world usage
     --disable-telemetry \
+    # OPTIONAL: Skip archived repositories when auditing all repositories owned by the specified user or organization
+    --skip-archived \
     # OPTIONAL: Skip automatic check for updates to this tool
     --skip-update-check
 ```
