@@ -9,7 +9,8 @@
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
     "dev": "node --experimental-specifier-resolution=node --loader ts-node/esm src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "seed-github-enterprise-server-instance": "npx ts-node --esm script/seed-github-enterprise-server-instance.ts"
   },
   "author": "Tim Rogers <me@timrogers.co.uk>",
   "license": "MIT",
