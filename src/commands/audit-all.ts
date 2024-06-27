@@ -33,6 +33,7 @@ interface Arguments {
   owner: string;
   ownerType: OwnerType;
   proxyUrl: string | undefined;
+  skipArchived: boolean;
   skipUpdateCheck: boolean;
   verbose: boolean;
 }
@@ -101,6 +102,11 @@ command
     'Disable anonymous telemetry that gives the maintainers of this tool basic information about real-world usage. For more detailed information about the built-in telemetry, see the readme at https://github.com/timrogers/gh-migration-audit.',
     false,
   )
+  .option(
+    '--skip-archived',
+    'Skip archived repositories when auditing all repositories owned by the specified user or organization',
+    false,
+  )
   .option('--skip-update-check', 'Skip automatic check for updates to this tool', false)
   .action(
     actionRunner(async (opts: Arguments) => {
@@ -111,6 +117,7 @@ command
         owner,
         ownerType,
         proxyUrl,
+        skipArchived,
         skipUpdateCheck,
         verbose,
       } = opts;
@@ -177,7 +184,9 @@ command
         },
       });
 
-      logger.info(`Identifying all repos owned by ${owner}...`);
+      logger.info(
+        `Identifying all repos owned by ${owner}${skipArchived ? ', excluding archived repos' : ''}...`,
+      );
 
       const repoNames: string[] = [];
 
@@ -188,7 +197,11 @@ command
 
         for await (const { data: reposPage } of iterator) {
           for (const repo of reposPage) {
-            repoNames.push(repo.name);
+            if (skipArchived) {
+              if (!repo.archived) repoNames.push(repo.name);
+            } else {
+              repoNames.push(repo.name);
+            }
           }
         }
       } else {
@@ -198,7 +211,11 @@ command
 
         for await (const { data: reposPage } of iterator) {
           for (const repo of reposPage) {
-            repoNames.push(repo.name);
+            if (skipArchived) {
+              if (!repo.archived) repoNames.push(repo.name);
+            } else {
+              repoNames.push(repo.name);
+            }
           }
         }
       }
