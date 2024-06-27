@@ -7,7 +7,7 @@ import {
 import { Octokit, RequestError } from 'octokit';
 import { paginateGraphql } from '@octokit/plugin-paginate-graphql';
 import { throttling } from '@octokit/plugin-throttling';
-import { Logger } from './types';
+import { Logger, LoggerFn } from './types';
 
 const OctokitWithPlugins = Octokit.plugin(paginateGraphql).plugin(throttling);
 
@@ -34,10 +34,20 @@ export const createOctokit = (
     });
   };
 
+  const wrappedWarn: LoggerFn = (message: string, meta: unknown) => {
+    // Suppress automatic warning from @octokit/request about the tag protections API being deprecated
+    // (https://github.com/octokit/request.js/blob/712d2208a285ff11d7f3ca8362ca53289fd7bc82/src/fetch-wrapper.ts#L63-L74)
+    if (message.includes('https://gh.io/tag-protection-sunset')) return;
+    logger.warn(message, meta);
+  };
+
   const octokit = new OctokitWithPlugins({
     auth: token,
     baseUrl,
-    request: { fetch: fetch || customFetch },
+    request: {
+      fetch: fetch || customFetch,
+      log: { ...logger, warn: wrappedWarn },
+    },
     retry: {
       enabled: false,
     },

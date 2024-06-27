@@ -67,13 +67,11 @@ export interface Auditor {
   auditor: AuditorFunction;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type LoggerFn = (message: string, meta?: any) => unknown;
 export interface Logger {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  debug: (message: string, meta?: any) => unknown;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  info: (message: string, meta?: any) => unknown;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  warn: (message: string, meta?: any) => unknown;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  error: (message: string, meta?: any) => unknown;
+  debug: LoggerFn;
+  info: LoggerFn;
+  warn: LoggerFn;
+  error: LoggerFn;
 }
