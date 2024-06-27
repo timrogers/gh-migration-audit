@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
+    "@types/semver": "^7.5.8",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.8.0",
     "@yao-pkg/pkg": "^5.12.0",
