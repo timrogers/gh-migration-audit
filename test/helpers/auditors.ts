@@ -1,7 +1,9 @@
 import { AuditorFunctionArgs, GraphqlRepository, Logger } from '../../src/types.js';
 import { createOctokit } from '../../src/octokit';
 import { buildRepository } from './repositories';
-import { FetchMockSandbox } from 'fetch-mock';
+import fetchMock from 'fetch-mock';
+
+type FetchMock = typeof fetchMock;
 
 export const buildAuditorArguments = ({
   graphqlRepositoryOverrides,
@@ -9,7 +11,7 @@ export const buildAuditorArguments = ({
   gitHubEnterpriseServerVersion,
 }: {
   graphqlRepositoryOverrides?: Partial<GraphqlRepository>;
-  fetchMock?: FetchMockSandbox;
+  fetchMock?: FetchMock;
   gitHubEnterpriseServerVersion?: string;
 }): AuditorFunctionArgs => {
   const graphqlRepository = buildRepository(graphqlRepositoryOverrides);
