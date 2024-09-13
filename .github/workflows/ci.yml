@@ -78,11 +78,16 @@ jobs:
         with:
           name: package-macos
           path: bin/gh-migration-audit-darwin-amd64
-      - name: Upload Linux binary as artifact
+      - name: Upload Linux x64 binary as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: package-linux
+          name: package-linux-x64
           path: bin/gh-migration-audit-linux-amd64
+      - name: Upload Linux arm64 binary as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: package-linux-arm64
+          path: bin/gh-migration-audit-linux-arm64
       - name: Upload Windows binary as artifact
         uses: actions/upload-artifact@v4
         with:
@@ -108,10 +113,15 @@ jobs:
         with:
           name: package-macos
           path: bin
-      - name: Download Linux binary
+      - name: Download Linux x64 binary
         uses: actions/download-artifact@v4
         with:
-          name: package-linux
+          name: package-linux-x64
+          path: bin
+      - name: Download Linux arm64 binary
+        uses: actions/download-artifact@v4
+        with:
+          name: package-linux-arm64
           path: bin
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
@@ -119,6 +129,7 @@ jobs:
           files: |
             bin/gh-migration-audit-darwin-amd64
             bin/gh-migration-audit-linux-amd64
+            bin/gh-migration-audit-linux-arm64
             bin/gh-migration-audit-windows-amd64.exe
           generate_release_notes: true
 
