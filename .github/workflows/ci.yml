@@ -59,6 +59,7 @@ jobs:
       matrix:
         os: [ windows, macos, ubuntu ]
     runs-on: ${{ matrix.os }}-latest
+    if: ${{ matrix.os }} == 'macos'
     env:
       PLATFORM_OS_NAME: ${{ matrix.os == 'ubuntu' && 'linux' || matrix.os }}
       PLATFORM_NODE_EXECUTABLE_NAME: migration-audit-${{ matrix.os == 'macos' && 'darwin' || (matrix.os == 'windows' && 'win' || 'linux' )}}
@@ -81,6 +82,13 @@ jobs:
       
       - name: Generate binaries
         run: npm run packageSea ${{env.PLATFORM_OS_NAME}}
+        env:
+          ACTIONS_STEP_DEBUG: true
+
+      - name: Test AMD binary
+        run: |
+          export PATH=$PATH:./bin
+          ${{ env.PLATFORM_NODE_EXECUTABLE_NAME }}-x64${{env.PLATFORM_EXTENSION}}
 
       - name: Rename x64 binary to conform to GitHub CLI extension rules
         run: mv bin/${{ env.PLATFORM_NODE_EXECUTABLE_NAME }}-x64${{env.PLATFORM_EXTENSION}} bin/${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-amd64${{env.PLATFORM_EXTENSION}}
