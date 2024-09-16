@@ -178,14 +178,16 @@ function exec(cmd, args){
 }
 
 async function writeSignature(platform, arch, outputPath) {
-    if (platform === PLATFORM_NAME.MACOS && arch === ARCH_TYPE.ARM64 && process.platform == 'darwin') {
+    if (platform === PLATFORM_NAME.MACOS && process.platform == 'darwin') {
         if (process.env.MAC_DEVELOPER_CN) {
+            console.log("Signing binary");
             exec('codesign', ['--sign', process.env.MAC_DEVELOPER_CN, outputPath]);
         }
     }
     else if (platform  === PLATFORM_NAME.WINDOWS && process.platform === 'win32') {
         // Not required
         if (process.env.WIN_DEVELOPER_PFX && process.env.WIN_DEVELOPER_PWD) {
+            console.log("Signing binary");
             exec(await findSignTool(), ['sign',
                 '/fd', 'SHA256',
                 '/f', process.env.WIN_DEVELOPER_PFX, '/p', process.env.WIN_DEVELOPER_PWD,
@@ -196,13 +198,15 @@ async function writeSignature(platform, arch, outputPath) {
 }
 
 async function prepareSignature(platform, arch, nodeBinaryPath) {
-    if (platform === PLATFORM_NAME.MACOS && arch === ARCH_TYPE.ARM64) {
+    if (platform === PLATFORM_NAME.MACOS) {
         if (process.platform == 'darwin'){
+            console.log("Removing signature");
             exec('codesign', ['--remove-signature', nodeBinaryPath]);
         }
         return ['--macho-segment-name', 'NODE_SEA'];
     }
     else if (platform  === PLATFORM_NAME.WINDOWS && process.platform == 'win32') {
+        console.log("Removing signature");
         exec(await findSignTool(), ['remove', '/s', nodeBinaryPath]);
     }
     return [];
