@@ -23,7 +23,7 @@ jobs:
         uses: dawidd6/action-download-artifact@bf251b5aa9c2f7eeb574a96ee720e24f801b7c11
         with:
           run_id: ${{ github.event.workflow_run.id }}
-          name: package-macos
+          name: package-macos-amd64
           path: bin
       - name: Create `output` directory
         run: mkdir output
@@ -79,7 +79,7 @@ jobs:
         uses: dawidd6/action-download-artifact@bf251b5aa9c2f7eeb574a96ee720e24f801b7c11
         with:
            run_id: ${{ github.event.workflow_run.id }}
-           name: package-linux
+           name: package-linux-amd64
            path: bin
       - name: Create `output` directory
         run: mkdir output
@@ -135,7 +135,7 @@ jobs:
         uses: dawidd6/action-download-artifact@bf251b5aa9c2f7eeb574a96ee720e24f801b7c11
         with:
           run_id: ${{ github.event.workflow_run.id }}
-          name: package-windows
+          name: package-windows-amd64
           path: bin
       - name: Create `output` directory
         run: mkdir output

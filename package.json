@@ -6,6 +6,7 @@
   "homepage": "https://github.com/timrogers/gh-migration-audit",
   "scripts": {
     "package": "node build.js && npx pkg dist/migration-audit.cjs --out-path bin --targets node20-linux-x64,node20-linux-arm64,node20-macos-x64,node20-win-x64",
+    "packageSea": "node package.js",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
     "dev": "node --experimental-specifier-resolution=node --loader ts-node/esm src/index.ts",
@@ -27,15 +28,16 @@
     "posthog-node": "^4.0.0",
     "semver": "^7.6.0",
     "undici": "^6.19.2",
-    "winston": "^3.13.0",
-    "xz": "^2.0.2"
+    "winston": "^3.13.0"
   },
   "devDependencies": {
+    "@smessie/readable-web-to-node-stream": "^3.0.3",
     "@types/jest": "^29.5.12",
     "@types/semver": "^7.5.8",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.16.1",
     "@yao-pkg/pkg": "^5.12.0",
+    "axios": "^1.7.7",
     "esbuild": "^0.20.2",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -46,7 +48,9 @@
     "prettier": "^3.3.2",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.2"
+    "typescript": "^5.5.2",
+    "unzipper": "^0.12.3",
+    "xz-decompress": "^0.2.2"
   },
   "repository": {
     "type": "git",
