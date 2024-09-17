@@ -7,5 +7,5 @@
     "build": "node build.js",
     "run": "npm run dev",
     "test": "npm test"
-  },
+  }
 }
