@@ -8,7 +8,7 @@ describe('repositoryCheckRunHistory', () => {
     const fetch = fetchMock
       .sandbox()
       .getOnce('https://api.github.com/repos/test/test', {
-        default_branch: 'main'
+        default_branch: 'main',
       })
       .getOnce('https://api.github.com/repos/test/test/commits/main/check-suites', {
         total_count: 2,
@@ -29,7 +29,7 @@ describe('repositoryCheckRunHistory', () => {
     const fetch = fetchMock
       .sandbox()
       .getOnce('https://api.github.com/repos/test/test', {
-        default_branch: 'main'
+        default_branch: 'main',
       })
       .getOnce('https://api.github.com/repos/test/test/commits/main/check-suites', {
         total_count: 0,
