@@ -1,0 +1,7 @@
+{
+    "main": "dist/migration-audit.cjs",
+    "output": "bin/migration-audit.blob",
+    "disableExperimentalSEAWarning": true,
+    "useSnapshot": false,
+    "useCodeCache": false
+  } 
