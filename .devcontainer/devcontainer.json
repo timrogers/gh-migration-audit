@@ -1,0 +1,11 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "tasks":{
+    "build": "node build.js",
+    "run": "npm run dev",
+    "test": "npm test"
+  },
+}
