@@ -17,6 +17,7 @@ import * as repositoryActionsSecrets from './auditors/repository-actions-secrets
 import * as repositoryActionsSelfHostedRunners from './auditors/repository-actions-self-hosted-runners';
 import * as repositoryActionsVariables from './auditors/repository-actions-variables';
 import * as repositoryActionsWorkflowRuns from './auditors/repository-actions-workflow-runs';
+import * as repositoryCheckRunHistory from './auditors/repository-check-run-history';
 import * as repositoryCodeScanningAlerts from './auditors/repository-code-scanning-alerts';
 import * as repositoryCodeScanningAnalyses from './auditors/repository-code-scanning-analyses';
 import * as repositoryCodeScanningDefaultSetup from './auditors/repository-code-scanning-default-setup';
@@ -47,6 +48,7 @@ export const DEFAULT_AUDITORS: Auditor[] = [
   repositoryActionsSelfHostedRunners,
   repositoryActionsVariables,
   repositoryActionsWorkflowRuns,
+  repositoryCheckRunHistory,
   repositoryCodeScanningAlerts,
   repositoryCodeScanningAnalyses,
   repositoryCodeScanningDefaultSetup,
