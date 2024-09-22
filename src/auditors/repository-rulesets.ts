@@ -3,15 +3,10 @@ import { AuditorFunction, AuditorWarning } from '../types';
 export const TYPE = 'repository-rulesets';
 
 export const auditor: AuditorFunction = async ({
-  gitHubEnterpriseServerVersion,
   octokit,
   owner,
   repo,
 }): Promise<AuditorWarning[]> => {
-  if (typeof gitHubEnterpriseServerVersion !== 'undefined') {
-    return [];
-  }
-
   const { data: rulesets } = await octokit.rest.repos.getRepoRulesets({
     owner,
     repo,
