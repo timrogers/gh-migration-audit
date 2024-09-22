@@ -41,13 +41,4 @@ describe('repository-rulesets', () => {
 
     expect(warnings.length).toEqual(0);
   });
-
-  it('no-ops if running against GitHub Enterprise Server', async () => {
-    const auditorArguments = buildAuditorArguments({
-      gitHubEnterpriseServerVersion: '3.10.0',
-    });
-    const warnings = await auditor(auditorArguments);
-
-    expect(warnings.length).toEqual(0);
-  });
 });

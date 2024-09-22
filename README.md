@@ -4,9 +4,9 @@ A [GitHub CLI](https://cli.github.com/) [extension](https://cli.github.com/manua
 
 You can use this tool to identify data that will be lost, or which you'll need to migrate manually, when migrating:
 
-* from GitHub Enterprise Server (GHES) v3.7 onwards to GitHub Enterprise Cloud (GHEC)
-* from GitHub Enterprise Cloud (GHEC) to GitHub Enterprise Server (GHES)
-* between tenants on GitHub.com (e.g. from a normal GitHub.com account to an [Enterprise Managed Users](https://docs.github.com/en/enterprise-cloud@latest/admin/identity-and-access-management/using-enterprise-managed-users-for-iam/about-enterprise-managed-users) organization)
+- from GitHub Enterprise Server (GHES) v3.11 onwards to GitHub Enterprise Cloud (GHEC)
+- from GitHub Enterprise Cloud (GHEC) to GitHub Enterprise Server (GHES)
+- between tenants on GitHub.com (e.g. from a normal GitHub.com account to an [Enterprise Managed Users](https://docs.github.com/en/enterprise-cloud@latest/admin/identity-and-access-management/using-enterprise-managed-users-for-iam/about-enterprise-managed-users) organization)
 
 The results from audits with this tool are non-exhaustive - they won't identify every possible kind of data loss from a migration - but the goal is to get you 95% of the way there.
 

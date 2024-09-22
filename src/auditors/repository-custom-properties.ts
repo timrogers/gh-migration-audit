@@ -1,3 +1,4 @@
+import semver from 'semver';
 import { AuditorFunction, AuditorWarning } from '../types';
 
 export const TYPE = 'repository-custom-properties';
@@ -8,7 +9,10 @@ export const auditor: AuditorFunction = async ({
   owner,
   repo,
 }): Promise<AuditorWarning[]> => {
-  if (typeof gitHubEnterpriseServerVersion !== 'undefined') {
+  if (
+    typeof gitHubEnterpriseServerVersion !== 'undefined' &&
+    semver.lt(gitHubEnterpriseServerVersion, '3.13.0')
+  ) {
     return [];
   }
 

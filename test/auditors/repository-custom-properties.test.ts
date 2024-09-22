@@ -36,9 +36,23 @@ describe('repository-custom-properties', () => {
     expect(warnings.length).toEqual(0);
   });
 
-  it('no-ops if running against GitHub Enterprise Server', async () => {
+  it('no-ops if running against GitHub Enterprise Server < 3.13', async () => {
     const auditorArguments = buildAuditorArguments({
       gitHubEnterpriseServerVersion: '3.10.0',
+    });
+    const warnings = await auditor(auditorArguments);
+
+    expect(warnings.length).toEqual(0);
+  });
+
+  it('runs if running against GitHub Enterprise Server >=3.13', async () => {
+    const fetch = fetchMock
+      .sandbox()
+      .getOnce('https://api.github.com/repos/test/test/properties/values', []);
+
+    const auditorArguments = buildAuditorArguments({
+      fetchMock: fetch,
+      gitHubEnterpriseServerVersion: '3.13.0',
     });
     const warnings = await auditor(auditorArguments);
 

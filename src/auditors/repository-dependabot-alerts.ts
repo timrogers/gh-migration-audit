@@ -1,23 +1,13 @@
-import semver from 'semver';
-
 import { AuditorFunction, AuditorWarning } from '../types';
 import { RequestError } from 'octokit';
 
 export const TYPE = 'repository-dependabot-alerts';
 
 export const auditor: AuditorFunction = async ({
-  gitHubEnterpriseServerVersion,
   octokit,
   owner,
   repo,
 }): Promise<AuditorWarning[]> => {
-  if (
-    typeof gitHubEnterpriseServerVersion !== 'undefined' &&
-    semver.lt(gitHubEnterpriseServerVersion, '3.8.0')
-  ) {
-    return [];
-  }
-
   try {
     const { data } = await octokit.rest.dependabot.listAlertsForRepo({
       owner,
