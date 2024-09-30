@@ -10,7 +10,7 @@
     "lint-and-fix": "eslint . --ext .ts --fix",
     "dev": "npx tsx src/index.ts",
     "test": "jest",
-    "seed-github-enterprise-server-instance": "npx tsx script/seed-github-enterprise-server-instance.ts"
+    "configure-github-enterprise-server-instance": "npx tsx script/configure-github-enterprise-server-instance.ts"
   },
   "author": "Tim Rogers <me@timrogers.co.uk>",
   "license": "MIT",
@@ -42,6 +42,7 @@
     "fetch-mock": "^10.0.7",
     "jest": "^29.7.0",
     "jest-junit": "^16.0.0",
+    "libsodium-wrappers": "^0.7.15",
     "prettier": "^3.3.2",
     "ts-jest": "^29.1.2",
     "tsx": "^4.19.1",
