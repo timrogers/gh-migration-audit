@@ -75,7 +75,7 @@ command
   )
   .option(
     '--base-url <base_url>',
-    'The base URL for the GitHub API. You only need to set this if you are auditing a repo that is not currently hosted on GitHub.com.',
+    "The base URL of the GitHub API, if you're running an audit against a GitHub product other than GitHub.com. For GitHub Enterprise Server, this will be something like `https://github.acme.inc/api/v3`. For GitHub Enterprise Cloud with data residency, this will be `https://api.acme.ghe.com`, replacing `acme` with your own tenant.",
     'https://api.github.com',
   )
   .option(

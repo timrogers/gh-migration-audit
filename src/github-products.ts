@@ -49,7 +49,13 @@ export const getGitHubProductInformation = async (
 };
 
 const isGitHubEnterpriseServerBaseUrl = (baseUrl: string): boolean =>
-  baseUrl !== 'https://api.github.com';
+  !isDotcomBaseUrl(baseUrl) && !isGitHubEnterpriseCloudWithDataResidencyBaseUrl(baseUrl);
+
+const isDotcomBaseUrl = (baseUrl: string): boolean =>
+  baseUrl === 'https://api.github.com';
+
+const isGitHubEnterpriseCloudWithDataResidencyBaseUrl = (baseUrl: string): boolean =>
+  baseUrl.includes('.ghe.com');
 
 const getGitHubEnterpriseServerVersion = async (octokit: Octokit): Promise<string> => {
   const {
