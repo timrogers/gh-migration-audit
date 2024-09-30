@@ -2,11 +2,13 @@
 
 A [GitHub CLI](https://cli.github.com/) [extension](https://cli.github.com/manual/gh_extension) for auditing GitHub repositories to highlight data that cannot be automatically migrated using [GitHub's migration tools](https://docs.github.com/en/migrations/overview/migration-paths-to-github)
 
-You can use this tool to identify data that will be lost, or which you'll need to migrate manually, when migrating:
+You can use this tool to identify data that will be lost, or which you'll need to migrate manually, when migrating data away from:
 
-- from GitHub Enterprise Server (GHES) v3.11 onwards to GitHub Enterprise Cloud (GHEC)
-- from GitHub Enterprise Cloud (GHEC) to GitHub Enterprise Server (GHES)
-- between tenants on GitHub.com (e.g. from a normal GitHub.com account to an [Enterprise Managed Users](https://docs.github.com/en/enterprise-cloud@latest/admin/identity-and-access-management/using-enterprise-managed-users-for-iam/about-enterprise-managed-users) organization)
+- GitHub.com, including GitHub Enterprise Cloud (GHEC)
+- [GitHub Enterprise Cloud with data residency](https://github.com/newsroom/press-releases/data-residency-in-the-eu) 
+- GitHub Enterprise Server (GHES) v3.11 onwards
+
+to another GitHub target.
 
 The results from audits with this tool are non-exhaustive - they won't identify every possible kind of data loss from a migration - but the goal is to get you 95% of the way there.
 
@@ -71,7 +73,7 @@ gh migration-audit audit-repo \
     --repo octocat \
     # OPTIONAL: The path to write the audit result CSV to. Defaults to the specified owner and repo, followed by the current date and time, e.g. `monalisa_octocat_1698925405325.csv
     --output-path octocat.csv \
-    # OPTIONAL: The base URL of the GitHub API, if you're migrating from a migration source other than GitHub.com.
+    # OPTIONAL: The base URL of the GitHub API, if you're running an audit against a GitHub product other than GitHub.com. For GitHub Enterprise Server, this will be something like `https://github.acme.inc/api/v3`. For GitHub Enterprise Cloud with data residency, this will be `https://api.acme.ghe.com`, replacing `acme` with your own tenant.
     --base-url https://github.acme.inc/api/v3 \
     # OPTIONAL: The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.
     --proxy-url https://10.0.0.1:3128 \
@@ -101,7 +103,7 @@ gh migration-audit audit-all \
     --owner-type user \
     # OPTIONAL: The path to write the audit result CSV to. Defaults to the specified owner followed by the current date and time, e.g. `monalisa_1698925405325.csv`.
     --output-path octocat.csv \
-    # OPTIONAL: The base URL of the GitHub API, if you're migrating from a migration source other than GitHub.com.
+    # OPTIONAL: The base URL of the GitHub API, if you're running an audit against a GitHub product other than GitHub.com. For GitHub Enterprise Server, this will be something like `https://github.acme.inc/api/v3`. For GitHub Enterprise Cloud with data residency, this will be `https://api.acme.ghe.com`, replacing `acme` with your own tenant.
     --base-url https://github.acme.inc/api/v3 \
     # OPTIONAL: The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.
     --proxy-url https://10.0.0.1:3128 \
@@ -139,7 +141,7 @@ gh migration-audit audit-repos \
     --input-path input.csv \
     # OPTIONAL: The path to write the audit result CSV to. Defaults to the "repos" followed by the current date and time, e.g. `repos_1698925405325.csv`.
     --output-path octocat.csv \
-    # OPTIONAL: The base URL of the GitHub API, if you're migrating from a migration source other than GitHub.com.
+    # OPTIONAL: The base URL of the GitHub API, if you're running an audit against a GitHub product other than GitHub.com. For GitHub Enterprise Server, this will be something like `https://github.acme.inc/api/v3`. For GitHub Enterprise Cloud with data residency, this will be `https://api.acme.ghe.com`, replacing `acme` with your own tenant.
     --base-url https://github.acme.inc/api/v3 \
     # OPTIONAL: The URL of an HTTP(S) proxy to use for requests to the GitHub API (e.g. `http://localhost:3128`). This can also be set using the PROXY_URL environment variable.
     --proxy-url https://10.0.0.1:3128 \
