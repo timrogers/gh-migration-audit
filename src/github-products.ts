@@ -1,4 +1,5 @@
 import type { Octokit } from 'octokit';
+import { URL } from 'url';
 import { Endpoints } from '@octokit/types';
 import semver from 'semver';
 
@@ -54,8 +55,10 @@ const isGitHubEnterpriseServerBaseUrl = (baseUrl: string): boolean =>
 const isDotcomBaseUrl = (baseUrl: string): boolean =>
   baseUrl === 'https://api.github.com';
 
-const isGitHubEnterpriseCloudWithDataResidencyBaseUrl = (baseUrl: string): boolean =>
-  baseUrl.includes('.ghe.com');
+const isGitHubEnterpriseCloudWithDataResidencyBaseUrl = (baseUrl: string): boolean => {
+  const { host } = new URL(baseUrl);
+  return host.endsWith('ghe.com');
+};
 
 const getGitHubEnterpriseServerVersion = async (octokit: Octokit): Promise<string> => {
   const {
