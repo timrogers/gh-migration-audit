@@ -58,11 +58,43 @@ jobs:
         run: npm run packageSea ${{env.PLATFORM_OS_NAME}}
 
       - name: Rename x64 binary to conform to GitHub CLI extension rules
-        run: mv bin/${{ env.PLATFORM_NODE_EXECUTABLE_NAME }}-x64${{env.PLATFORM_EXTENSION}} bin/${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-amd64${{env.PLATFORM_EXTENSION}}
+        run: mv bin/${{ env.PLATFORM_NODE_EXECUTABLE_NAME }}-x64${{ env.PLATFORM_EXTENSION }} bin/${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-amd64${{ env.PLATFORM_EXTENSION }}
 
       - name: Rename ARM64 binary to conform to GitHub CLI extension rules
-        run: mv bin/${{ env.PLATFORM_NODE_EXECUTABLE_NAME }}-arm64${{env.PLATFORM_EXTENSION}} bin/${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-arm64${{env.PLATFORM_EXTENSION}}
-      
+        run: mv bin/${{ env.PLATFORM_NODE_EXECUTABLE_NAME }}-arm64${{ env.PLATFORM_EXTENSION }} bin/${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-arm64${{ env.PLATFORM_EXTENSION }}
+
+      - name: Write Apple signing key to a file
+        env:
+          APPLE_SIGNING_KEY_P12: ${{ secrets.APPLE_SIGNING_KEY_P12 }}
+        run: echo "$APPLE_SIGNING_KEY_P12" | base64 -d -o key.p12
+        if: ${{ matrix.os == 'macos' }}
+
+      - name: Write App Store Connect API key to a file
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+        run: echo "$APP_STORE_CONNECT_API_KEY" > app_store_connect_api_key.json
+        if: ${{ matrix.os == 'macos' }}
+
+      - name: Sign macOS x64 binary (macOS only)
+        uses: indygreg/apple-code-sign-action@v1
+        with:
+          input_path: bin/${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-amd64${{ env.PLATFORM_EXTENSION }}
+          p12_file: key.p12
+          p12_password: ${{ secrets.APPLE_SIGNING_KEY_PASSWORD }}
+          sign: true
+          sign_args: '--code-signature-flags=runtime'
+        if: ${{ matrix.os == 'macos' }}
+
+      - name: Sign macOS ARM64 binary (macOS only)
+        uses: indygreg/apple-code-sign-action@v1
+        with:
+          input_path: bin/${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-arm64${{ env.PLATFORM_EXTENSION }}
+          p12_file: key.p12
+          p12_password: ${{ secrets.APPLE_SIGNING_KEY_PASSWORD }}
+          sign: true
+          sign_args: '--code-signature-flags=runtime'
+        if: ${{ matrix.os == 'macos' }}
+
       - name: Upload ARM64 binary as artifact
         uses: actions/upload-artifact@v4
         with:
@@ -72,8 +104,35 @@ jobs:
       - name: Upload x64 binary as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: package-${{env.PLATFORM_OS_NAME}}-amd64
-          path: bin/${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-amd64${{env.PLATFORM_EXTENSION}}
+          name: package-${{ env.PLATFORM_OS_NAME }}-amd64
+          path: bin/${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-amd64${{ env.PLATFORM_EXTENSION }}
+
+      - name: Archive macOS AMD64 binary for notarisation (macOS only)
+        run: zip ${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-amd64.zip bin/${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-amd64${{ env.PLATFORM_EXTENSION }}
+        if: ${{ matrix.os == 'macos' }}
+
+      - name: Notarize signed macOS AMD64 binary (macOS only)
+        uses: indygreg/apple-code-sign-action@v1
+        with:
+          input_path: ${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-amd64.zip
+          sign: false
+          notarize: true
+          app_store_connect_api_key_json_file: app_store_connect_api_key.json
+        if: ${{ matrix.os == 'macos' }}
+
+      - name: Archive macOS ARM64 binary for notarisation (macOS only)
+        run: zip ${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-arm64.zip bin/${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-arm64${{ env.PLATFORM_EXTENSION }}
+        if: ${{ matrix.os == 'macos' }}
+        
+      - name: Notarize signed macOS ARM64 binary (macOS only)
+        uses: indygreg/apple-code-sign-action@v1
+        with:
+          input_path: ${{ env.PLATFORM_GH_EXECUTABLE_NAME }}-arm64.zip
+          sign: false
+          notarize: true
+          app_store_connect_api_key_json_file: app_store_connect_api_key.json
+        if: ${{ matrix.os == 'macos' }}
+      
 
   end_to_end_tests_macos:
     name: Run end to end tests (macOS/GitHub.com)
