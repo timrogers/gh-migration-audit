@@ -5,11 +5,11 @@ import {
   RequestInit as undiciRequestInit,
 } from 'undici';
 import { Octokit, RequestError } from 'octokit';
-import { paginateGraphql } from '@octokit/plugin-paginate-graphql';
+import { paginateGraphQL } from '@octokit/plugin-paginate-graphql';
 import { throttling } from '@octokit/plugin-throttling';
 import { Logger, LoggerFn } from './types';
 
-const OctokitWithPlugins = Octokit.plugin(paginateGraphql).plugin(throttling);
+const OctokitWithPlugins = Octokit.plugin(paginateGraphQL).plugin(throttling);
 
 interface OnRateLimitOptions {
   method: string;
