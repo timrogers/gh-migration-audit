@@ -1,7 +1,6 @@
 import { program } from 'commander';
 import _sodium from 'libsodium-wrappers';
 import { type Octokit as OctokitType } from 'octokit';
-import { GraphqlResponseError } from '@octokit/graphql';
 
 import { getGitHubProductInformation } from '../src/github-products';
 import { createLogger } from '../src/logger';
@@ -46,10 +45,8 @@ const isOrganizationAlreadyCreated = async ({
     return true;
   } catch (e) {
     if (
-      e instanceof GraphqlResponseError &&
-      e.errors &&
-      e.errors.length &&
-      e.errors[0].type === 'NOT_FOUND'
+      e instanceof Error &&
+      e.message.includes('Could not resolve to an Organization')
     ) {
       return false;
     } else {
@@ -102,12 +99,7 @@ const isRepositoryAlreadyCreated = async ({
 
     return true;
   } catch (e) {
-    if (
-      e instanceof GraphqlResponseError &&
-      e.errors &&
-      e.errors.length &&
-      e.errors[0].type === 'NOT_FOUND'
-    ) {
+    if (e instanceof Error && e.message.includes('Could not resolve to a Repository')) {
       return false;
     } else {
       throw e;
