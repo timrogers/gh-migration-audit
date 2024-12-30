@@ -23,7 +23,7 @@
     "commander": "^12.1.0",
     "csv-stringify": "^6.4.6",
     "filesize": "^10.1.6",
-    "octokit": "^3.1.2",
+    "octokit": "^4.0.3",
     "posthog-node": "^4.0.0",
     "semver": "^7.6.0",
     "undici": "^7.2.0",
