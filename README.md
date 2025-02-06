@@ -155,6 +155,45 @@ gh migration-audit audit-repos \
 
 The tool will audit all of the repos, and then write a CSV file to the `--output-path` with the results.
 
+### Authentication
+
+For the commands [audit-all](#audit-all-repos-owned-by-an-organization-or-user), [audit-repos](#audit-a-specific-set-of-repos) and [audit-repo](#audit-a-single-repo), this tool supports two types of authentication: `token` which expects a Personal Access Token or `installation` which uses a GitHub App installation for authentication. The tool will automatically determine the authentication type based on the provided parameters.
+
+- If a `--access-token` or `GITHUB_TOKEN` is provided it is assumed that the [token](#token-authentication) approach should be taken.
+- If a `--app-installation-id` or `GITHUB_APP_INSTALLATION_ID` is provided it is assumed that the [installation](#installation-authentication) approach should be taken. This approach also requires that an `--app-id` and also `--private-key` be provided in addition to the `--app-installation-id`. 
+
+#### Token Authentication
+
+This is the default and expects a value for `--access-token` to be provided and expects a Personal Access Token that has the appropriate scopes.
+
+```bash
+gh migration-audit audit-repo \
+    # A GitHub access token with the permissions described above. This can also be configured using the `GITHUB_TOKEN` environment variable.
+    --access-token GITHUB_TOKEN \
+    # The login of the user or organization that owns the repository
+    --owner monalisa \
+    # The name of the repository
+    --repo octocat
+```
+
+#### Installation Authentication
+
+This approach is for use with a GitHub App Installation and takes advantage of [auth-app.js](https://github.com/octokit/auth-app.js). Specifically [use with Octokit](https://github.com/octokit/auth-app.js/?tab=readme-ov-file#usage-with-octokit) implementation is used and creates an instance that is authenticated as an installation, with automated installation token refresh.
+
+```bash
+gh migration-audit audit-repo \
+    # The GitHub app ID
+    --app-id GITHUB_APP_ID \
+    # The GitHub app private key or path to a .pem file that contains the private key
+    --private-key GITHUB_APP_PRIVATE_KEY \
+    # The GitHub app installation ID
+    --app-installation-id GITHUB_APP_INSTALLATION_ID \
+    # The login of the user or organization that owns the repository
+    --owner monalisa \
+    # The name of the repository
+    --repo octocat
+```
+
 ## GitHub Enterprise Server (GHES) support
 
 This tool works with GitHub Enterprise Server, and __supports all [GitHub Enterprise Server versions](https://docs.github.com/en/enterprise-server/admin/all-releases) currently supported by GitHub__. GitHub Enterprise Server versions are supported for approximately a year from release.

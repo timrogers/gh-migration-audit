@@ -21,6 +21,7 @@ import {
   isSupportedGitHubEnterpriseServerVersion,
 } from '../github-products';
 import { POSTHOG_API_KEY, POSTHOG_HOST } from '../posthog';
+import { createAuthConfig } from '../auth';
 
 const command = new commander.Command();
 const { Option } = commander;
@@ -36,6 +37,9 @@ interface Arguments {
   skipArchived: boolean;
   skipUpdateCheck: boolean;
   verbose: boolean;
+  appId?: string | undefined;
+  privateKey?: string | undefined;
+  appInstallationId?: string | undefined;
 }
 
 enum OwnerType {
@@ -69,10 +73,22 @@ command
   .description(
     "Audits all of the repositories owned by a specific GitHub organization or user, identifying data that can't be migrated automatically",
   )
-  .option(
-    '--access-token <access_token>',
-    'The access token used to interact with the GitHub API. This can also be set using the GITHUB_TOKEN environment variable.',
+  .addOption(
+    new Option('--access-token <access_token>', 'The access token used to interact with the GitHub API. This can also be set using the GITHUB_TOKEN environment variable.')
+      .env('GITHUB_TOKEN')
   )
+  .addOption(
+    new Option('--app-installation-id <app_installation_id>', 'The installation ID of the GitHub App.')
+      .env('GITHUB_APP_INSTALLATION_ID')
+  )
+  .addOption(
+    new Option('--app-id <app_id>', 'The App ID of the GitHub App')
+      .env('GITHUB_APP_ID')
+  )
+  .addOption(
+    new Option('--private-key <private_key>', 'Content of the *.pem file you downloaded from the about page of the GitHub App. This can also be a path to the *.pem file.')
+      .env('GITHUB_APP_PRIVATE_KEY')
+  ) 
   .option(
     '--base-url <base_url>',
     "The base URL of the GitHub API, if you're running an audit against a GitHub product other than GitHub.com. For GitHub Enterprise Server, this will be something like `https://github.acme.inc/api/v3`. For GitHub Enterprise Cloud with data residency, this will be `https://api.acme.ghe.com`, replacing `acme` with your own tenant.",
@@ -107,11 +123,10 @@ command
     'Skip archived repositories when auditing all repositories owned by the specified user or organization',
     false,
   )
-  .option('--skip-update-check', 'Skip automatic check for updates to this tool', false)
+  .option('--skip-update-check', 'Skip automatic check for updates to this tool', false) 
   .action(
     actionRunner(async (opts: Arguments) => {
       const {
-        accessToken: accessTokenFromArguments,
         baseUrl,
         disableTelemetry,
         owner,
@@ -126,13 +141,7 @@ command
 
       if (!skipUpdateCheck) checkForUpdates(proxyUrl, logger);
 
-      const accessToken = accessTokenFromArguments || process.env.GITHUB_TOKEN;
-
-      if (!accessToken) {
-        throw new Error(
-          'You must specify a GitHub access token using the --access-token argument or GITHUB_TOKEN environment variable.',
-        );
-      }
+      const authConfig = createAuthConfig({ ...opts, logger: logger });
 
       const outputPath = opts.outputPath || `${owner}_${Date.now()}.csv`;
 
@@ -142,7 +151,7 @@ command
         );
       }
 
-      const octokit = createOctokit(accessToken, baseUrl, proxyUrl, logger);
+      const octokit = createOctokit(authConfig, baseUrl, proxyUrl, logger);
 
       const shouldCheckRateLimitAgain = await logRateLimitInformation(logger, octokit);
 
