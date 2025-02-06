@@ -8,6 +8,7 @@ import { Octokit, RequestError } from 'octokit';
 import { paginateGraphql } from '@octokit/plugin-paginate-graphql';
 import { throttling } from '@octokit/plugin-throttling';
 import { Logger, LoggerFn } from './types';
+import { AuthConfig } from './auth';
 
 const OctokitWithPlugins = Octokit.plugin(paginateGraphql).plugin(throttling);
 
@@ -17,7 +18,7 @@ interface OnRateLimitOptions {
 }
 
 export const createOctokit = (
-  token: string | undefined,
+  tokenOrConfig: string | AuthConfig | undefined,
   baseUrl: string,
   proxyUrl: string | undefined,
   logger: Logger,
@@ -41,8 +42,13 @@ export const createOctokit = (
     logger.warn(message, meta);
   };
 
-  const octokit = new OctokitWithPlugins({
-    auth: token,
+  const authConfig: AuthConfig = typeof(tokenOrConfig) === 'object'
+    ? tokenOrConfig
+    : { auth: tokenOrConfig, authStrategy: undefined };
+ 
+  const octokit = new OctokitWithPlugins({ 
+    auth: authConfig.auth,
+    authStrategy: authConfig.authStrategy,
     baseUrl,
     request: {
       fetch: fetch || customFetch,
