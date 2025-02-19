@@ -81,7 +81,7 @@ describe('createAuthConfig', () => {
                 appInstallationId,
                 logger: mockLogger,
             });
-        }).toThrow('You must specify a GitHub app private key using the --private-key argument or GITHUB_APP_PRIVATE_KEY environment variable.');
+        }).toThrow('You must specify a GitHub app private key using the --private-key argument, --private-key-file argument, GITHUB_APP_PRIVATE_KEY_FILE environment variable, or GITHUB_APP_PRIVATE_KEY environment variable.');
     });
 
     it('should return token auth config when accessToken is provided via environment variable', () => {
@@ -123,11 +123,11 @@ describe('createAuthConfig', () => {
         (readFileSync as jest.Mock).mockReturnValue('file-private-key');
 
         const appId = '12345';
-        const privateKey = '/path/to/private-key-file.pem';
+        const privateKeyFile = '/path/to/private-key-file.pem';
         const appInstallationId = '67890';
         const config = createAuthConfig({
             appId,
-            privateKey,
+            privateKeyFile,
             appInstallationId,
             logger: mockLogger,
         });
@@ -140,5 +140,64 @@ describe('createAuthConfig', () => {
                 installationId: parseInt(appInstallationId),
             },
         });
+    });
+
+    it('should return installation auth config when privateKeyFile is provided', () => {
+        (readFileSync as jest.Mock).mockReturnValue('file-private-key');
+
+        const appId = '12345';
+        const privateKeyFile = '/path/to/private-key-file.pem';
+        const appInstallationId = '67890';
+        const config = createAuthConfig({
+            appId,
+            privateKeyFile,
+            appInstallationId,
+            logger: mockLogger,
+        });
+
+        expect(config).toEqual({
+            authStrategy: expect.any(Function),
+            auth: {
+                appId: parseInt(appId),
+                privateKey: 'file-private-key',
+                installationId: parseInt(appInstallationId),
+            },
+        });
+    });
+
+    it('should return installation auth config when privateKeyFile is provided via environment variable', () => {
+        (readFileSync as jest.Mock).mockReturnValue('file-private-key');
+        process.env.GITHUB_APP_PRIVATE_KEY_FILE = '/path/to/private-key-file.pem';
+
+        const appId = '12345';
+        const appInstallationId = '67890';
+        const config = createAuthConfig({
+            appId,
+            appInstallationId,
+            logger: mockLogger,
+        });
+
+        expect(config).toEqual({
+            authStrategy: expect.any(Function),
+            auth: {
+                appId: parseInt(appId),
+                privateKey: 'file-private-key',
+                installationId: parseInt(appInstallationId),
+            },
+        });
+        delete process.env.GITHUB_APP_PRIVATE_KEY_FILE;
+    });
+
+    it('should throw an error when privateKey and privateKeyFile are both missing', () => {
+        const appId = '12345';
+        const appInstallationId = '67890';
+
+        expect(() => {
+            createAuthConfig({
+                appId,
+                appInstallationId,
+                logger: mockLogger,
+            });
+        }).toThrow('You must specify a GitHub app private key using the --private-key argument, --private-key-file argument, GITHUB_APP_PRIVATE_KEY_FILE environment variable, or GITHUB_APP_PRIVATE_KEY environment variable.');
     });
 });

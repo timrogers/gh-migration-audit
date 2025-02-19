@@ -22,16 +22,22 @@ const getAuthAppId = (appId?: string): number => {
   return parseInt(authAppId);
 };
 
-const getAuthPrivateKey = (privateKey?: string): string => {
-  let authPrivateKey = privateKey || process.env.GITHUB_APP_PRIVATE_KEY;
+const getAuthPrivateKey = (privateKey?: string, privateKeyFile?: string): string => {
+  let authPrivateKey: string | undefined;
+
+  if (privateKeyFile || process.env.GITHUB_APP_PRIVATE_KEY_FILE) {
+    const filePath = privateKeyFile || process.env.GITHUB_APP_PRIVATE_KEY_FILE;
+    authPrivateKey = filePath ? readFileSync(filePath, 'utf-8') : undefined;
+  } else if (privateKey || process.env.GITHUB_APP_PRIVATE_KEY) {
+    authPrivateKey = privateKey || process.env.GITHUB_APP_PRIVATE_KEY;
+  }
+
   if (!authPrivateKey) {
     throw new Error(
-      'You must specify a GitHub app private key using the --private-key argument or GITHUB_APP_PRIVATE_KEY environment variable.',
+      'You must specify a GitHub app private key using the --private-key argument, --private-key-file argument, GITHUB_APP_PRIVATE_KEY_FILE environment variable, or GITHUB_APP_PRIVATE_KEY environment variable.',
     );
   }
-  if (authPrivateKey.endsWith('.pem')) {
-    authPrivateKey = readFileSync(authPrivateKey, 'utf-8');
-  }
+
   return authPrivateKey;
 };
 
@@ -58,11 +64,12 @@ const getTokenAuthConfig = (accessToken?: string): AuthConfig => {
 const getInstallationAuthConfig = (
   appId?: string,
   privateKey?: string,
+  privateKeyFile?: string,
   appInstallationId?: string,
 ): AuthConfig => {
   const auth = {
     appId: getAuthAppId(appId),
-    privateKey: getAuthPrivateKey(privateKey),
+    privateKey: getAuthPrivateKey(privateKey, privateKeyFile),
     installationId: getAuthInstallationId(appInstallationId),
   };
   return { authStrategy: createAppAuth, auth };
@@ -72,19 +79,21 @@ export const createAuthConfig = ({
   accessToken,
   appId,
   privateKey,
+  privateKeyFile,
   appInstallationId,
   logger,
 }: {
   accessToken?: string | undefined;
   appId?: string | undefined;
   privateKey?: string | undefined;
+  privateKeyFile?: string | undefined;
   appInstallationId?: string | undefined;
   logger: Logger;
 }): AuthConfig => {
   try {
     if (appInstallationId || process.env.GITHUB_APP_INSTALLATION_ID) {
       logger.info('GitHub App installation ID detected. Authenticating using GitHub App installation...');
-      return getInstallationAuthConfig(appId, privateKey, appInstallationId);
+      return getInstallationAuthConfig(appId, privateKey, privateKeyFile, appInstallationId);
     } else {
       logger.info('No GitHub App installation ID detected. Defaulting to authenticating using an access token...');
       return getTokenAuthConfig(accessToken);
