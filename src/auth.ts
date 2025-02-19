@@ -86,7 +86,7 @@ export const createAuthConfig = ({
       logger.info('GitHub App installation ID detected. Authenticating using GitHub App installation...');
       return getInstallationAuthConfig(appId, privateKey, appInstallationId);
     } else {
-      logger.info('Validating configuration using GitHub access token');
+      logger.info('No GitHub App installation ID detected. Defaulting to authenticating using an access token...');
       return getTokenAuthConfig(accessToken);
     }
   } catch (e) {
