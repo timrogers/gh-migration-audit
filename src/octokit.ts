@@ -18,7 +18,7 @@ interface OnRateLimitOptions {
 }
 
 export const createOctokit = (
-  tokenOrConfig: string | AuthConfig | undefined,
+  authConfig: AuthConfig,
   baseUrl: string,
   proxyUrl: string | undefined,
   logger: Logger,
@@ -41,10 +41,6 @@ export const createOctokit = (
     if (message.includes('https://gh.io/tag-protection-sunset')) return;
     logger.warn(message, meta);
   };
-
-  const authConfig: AuthConfig = typeof(tokenOrConfig) === 'object'
-    ? tokenOrConfig
-    : { auth: tokenOrConfig, authStrategy: undefined };
  
   const octokit = new OctokitWithPlugins({ 
     auth: authConfig.auth,
