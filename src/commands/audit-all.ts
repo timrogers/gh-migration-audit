@@ -78,7 +78,7 @@ command
       .env('GITHUB_TOKEN')
   )
   .addOption(
-    new Option('--app-installation-id <app_installation_id>', 'The installation ID of the GitHub App.')
+    new Option('--app-installation-id <app_installation_id>', 'The installation ID of the GitHub App. If this is provided, the app ID and private key must also be provided.')
       .env('GITHUB_APP_INSTALLATION_ID')
   )
   .addOption(
