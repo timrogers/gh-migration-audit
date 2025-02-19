@@ -164,7 +164,7 @@ For the commands [audit-all](#audit-all-repos-owned-by-an-organization-or-user),
 
 #### Token Authentication
 
-This is the default and expects a value for `--access-token` to be provided and expects a Personal Access Token that has the appropriate scopes.
+By default, the extension expects an access token with appropriate scopes to be provided with the `--access-token` argument or `GITHUB_ACCESS_TOKEN` environment variable.
 
 ```bash
 gh migration-audit audit-repo \
