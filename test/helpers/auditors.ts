@@ -24,7 +24,7 @@ export const buildAuditorArguments = ({
   };
 
   const octokit = createOctokit(
-    'dummy',
+    { auth: 'dummy' },
     'https://api.github.com',
     undefined,
     logger,

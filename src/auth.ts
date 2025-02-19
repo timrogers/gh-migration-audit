@@ -4,7 +4,7 @@ import { Logger } from './types';
 import { readFileSync } from 'fs';
 
 export interface AuthConfig {
-  authStrategy: ((options: StrategyOptions) => AuthInterface) | undefined;
+  authStrategy?: ((options: StrategyOptions) => AuthInterface) | undefined;
   auth:
     | string
     | { appId: number; privateKey: string; installationId: number }
