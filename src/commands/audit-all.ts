@@ -86,9 +86,13 @@ command
       .env('GITHUB_APP_ID')
   )
   .addOption(
-    new Option('--private-key <private_key>', 'The private key of the GitHub App. This can be the content of the `.pem` file downloaded from GitHub, or the path to that file. If this is provided, the app ID and installation ID must also be provided.')
+    new Option('--private-key <private_key>', 'The private key of the GitHub App. Alternatively, use --private-key-file if you have a .pem file. If this is provided, the app ID and installation ID must also be provided.')
       .env('GITHUB_APP_PRIVATE_KEY')
   ) 
+  .addOption(
+    new Option('--private-key-file <private_key_file>', 'The private key of the GitHub App. For example, path to a *.pem file you downloaded from the about page of the GitHub App. If this is provided, the app ID and installation ID must also be provided.')
+      .env('GITHUB_APP_PRIVATE_KEY_FILE')
+  )
   .option(
     '--base-url <base_url>',
     "The base URL of the GitHub API, if you're running an audit against a GitHub product other than GitHub.com. For GitHub Enterprise Server, this will be something like `https://github.acme.inc/api/v3`. For GitHub Enterprise Cloud with data residency, this will be `https://api.acme.ghe.com`, replacing `acme` with your own tenant.",
