@@ -71,7 +71,7 @@ command
   .name('audit-all')
   .version(VERSION)
   .description(
-    "Audits all of the repositories owned by a specific GitHub organization or user, identifying data that can't be migrated automatically",
+    "Audits all of the repositories owned by a specific GitHub organization or user, identifying data that can't be migrated automatically\n\nBy default, this command authenticates using a GitHub access token. Alternatively, you can provide an app ID, installation ID and private key for a GitHub App.",
   )
   .addOption(
     new Option('--access-token <access_token>', 'The access token used to interact with the GitHub API. This can also be set using the GITHUB_TOKEN environment variable.')
