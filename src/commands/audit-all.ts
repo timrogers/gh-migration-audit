@@ -86,7 +86,7 @@ command
       .env('GITHUB_APP_ID')
   )
   .addOption(
-    new Option('--private-key <private_key>', 'Content of the *.pem file you downloaded from the about page of the GitHub App. This can also be a path to the *.pem file.')
+    new Option('--private-key <private_key>', 'The private key of the GitHub App. This can be the content of the `.pem` file downloaded from GitHub, or the path to that file. If this is provided, the app ID and installation ID must also be provided.')
       .env('GITHUB_APP_PRIVATE_KEY')
   ) 
   .option(
