@@ -82,7 +82,7 @@ command
       .env('GITHUB_APP_INSTALLATION_ID')
   )
   .addOption(
-    new Option('--app-id <app_id>', 'The App ID of the GitHub App')
+    new Option('--app-id <app_id>', 'The App ID of the GitHub App. If this is provided, the installation ID and private key must also be provided.')
       .env('GITHUB_APP_ID')
   )
   .addOption(
