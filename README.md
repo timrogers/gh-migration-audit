@@ -178,7 +178,9 @@ gh migration-audit audit-repo \
 
 #### Installation Authentication
 
-This approach is for use with a GitHub App Installation and takes advantage of [auth-app.js](https://github.com/octokit/auth-app.js). Specifically [use with Octokit](https://github.com/octokit/auth-app.js/?tab=readme-ov-file#usage-with-octokit) implementation is used and creates an instance that is authenticated as an installation, with automated installation token refresh.
+Instead of [token authentication](#token-authentication), installation authentication can be used by providing values for `--app-id`, `--private-key`, and `--app-installation-id`. Use of environment variables is also supported by providing `GITHUB_APP_ID`, `GITHUB_APP_PRIVATE_KEY`, and `GITHUB_APP_INSTALLATION_ID`.
+
+Installation Authentication uses a `GitHub App` to access resources on behalf of a user in an organization and can provide longer-lived integration. A [personal access token](#token-authentication) is great for short-lived scripts but if you have a large organization you are trying to audit you should consider using a GitHub App instead. Additionally, a personal access token is associated with a user and can cause the process to fail if the user no longer has access to the resources you are auditing. A GitHub App is not dependent on a user.
 
 ```bash
 gh migration-audit audit-repo \
