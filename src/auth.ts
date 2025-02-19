@@ -84,7 +84,7 @@ export const createAuthConfig = ({
 }): AuthConfig => {
   try {
     if (appInstallationId || getEnvVar('GITHUB_APP_INSTALLATION_ID')) {
-      logger.info('Validating configuration using GitHub App installation');
+      logger.info('GitHub App installation ID detected. Authenticating using GitHub App installation...');
       return getInstallationAuthConfig(appId, privateKey, appInstallationId);
     } else {
       logger.info('Validating configuration using GitHub access token');
