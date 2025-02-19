@@ -40,7 +40,7 @@ describe('auditRepository', () => {
     });
 
     const octokit = createOctokit(
-      'dummy',
+      { auth: 'dummy' },
       'https://api.github.com',
       undefined,
       logger,
@@ -74,7 +74,7 @@ describe('auditRepositories', () => {
     });
 
     const octokit = createOctokit(
-      'dummy',
+      { auth: 'dummy' },
       'https://api.github.com',
       undefined,
       logger,
