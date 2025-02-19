@@ -11,10 +11,9 @@ export interface AuthConfig {
     | undefined;
 }
 
-const getEnvVar = (name: string): string | undefined => process.env[name];
 
 const getAuthAppId = (appId?: string): number => {
-  const authAppId = appId || getEnvVar('GITHUB_APP_ID');
+  const authAppId = appId || process.env.GITHUB_APP_ID;
   if (!authAppId || isNaN(parseInt(authAppId))) {
     throw new Error(
       'You must specify a GitHub app ID using the --app-id argument or GITHUB_APP_ID environment variable.',
@@ -24,7 +23,7 @@ const getAuthAppId = (appId?: string): number => {
 };
 
 const getAuthPrivateKey = (privateKey?: string): string => {
-  let authPrivateKey = privateKey || getEnvVar('GITHUB_APP_PRIVATE_KEY');
+  let authPrivateKey = privateKey || process.env.GITHUB_APP_PRIVATE_KEY;
   if (!authPrivateKey) {
     throw new Error(
       'You must specify a GitHub app private key using the --private-key argument or GITHUB_APP_PRIVATE_KEY environment variable.',
@@ -37,7 +36,7 @@ const getAuthPrivateKey = (privateKey?: string): string => {
 };
 
 const getAuthInstallationId = (appInstallationId?: string): number => {
-  const authInstallationId = appInstallationId || getEnvVar('GITHUB_APP_INSTALLATION_ID');
+  const authInstallationId = appInstallationId || process.env.GITHUB_APP_INSTALLATION_ID;
   if (!authInstallationId || isNaN(parseInt(authInstallationId))) {
     throw new Error(
       'You must specify a GitHub app installation ID using the --app-installation-id argument or GITHUB_APP_INSTALLATION_ID environment variable.',
@@ -47,7 +46,7 @@ const getAuthInstallationId = (appInstallationId?: string): number => {
 };
 
 const getTokenAuthConfig = (accessToken?: string): AuthConfig => {
-  const authToken = accessToken || getEnvVar('GITHUB_TOKEN');
+  const authToken = accessToken || process.env.GITHUB_TOKEN;
   if (!authToken) {
     throw new Error(
       'You must specify a GitHub access token using the --access-token argument or GITHUB_TOKEN environment variable.',
@@ -83,7 +82,7 @@ export const createAuthConfig = ({
   logger: Logger;
 }): AuthConfig => {
   try {
-    if (appInstallationId || getEnvVar('GITHUB_APP_INSTALLATION_ID')) {
+    if (appInstallationId || process.env.GITHUB_APP_INSTALLATION_ID) {
       logger.info('GitHub App installation ID detected. Authenticating using GitHub App installation...');
       return getInstallationAuthConfig(appId, privateKey, appInstallationId);
     } else {
