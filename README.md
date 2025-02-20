@@ -178,7 +178,7 @@ gh migration-audit audit-repo \
 
 #### Installation Authentication
 
-Instead of [token authentication](#token-authentication), installation authentication can be used by providing values for `--app-id`, `--private-key` or `--private-key-file`, and `--app-installation-id`. Use of environment variables is also supported by providing `GITHUB_APP_ID`, `GITHUB_APP_PRIVATE_KEY` or `GITHUB_APP_PRIVATE_KEY_FILE`, and `GITHUB_APP_INSTALLATION_ID`.
+Instead of [token authentication](#token-authentication), installation authentication can be used by providing values for `--app-id`, `--app-installation-id`, and either `--private-key` or `--private-key-file`. Use of environment variables is also supported by providing `GITHUB_APP_ID`, `GITHUB_APP_INSTALLATION_ID`, and either `GITHUB_APP_PRIVATE_KEY` or `GITHUB_APP_PRIVATE_KEY_FILE`.
 
 Installation Authentication uses a `GitHub App` to access resources on behalf of a user in an organization and can provide longer-lived integration. A [personal access token](#token-authentication) is great for short-lived scripts but if you have a large organization you are trying to audit you should consider using a GitHub App instead. Additionally, a personal access token is associated with a user and can cause the process to fail if the user no longer has access to the resources you are auditing. A GitHub App is not dependent on a user.
 
