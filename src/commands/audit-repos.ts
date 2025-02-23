@@ -103,24 +103,31 @@ command
     "Audits a list of repos provided in a CSV, identifying data that can't be migrated automatically",
   )
   .addOption(
-    new Option('--access-token <access_token>', 'The access token used to interact with the GitHub API. This can also be set using the GITHUB_TOKEN environment variable.')
-      .env('GITHUB_TOKEN')
+    new Option(
+      '--access-token <access_token>',
+      'The access token used to interact with the GitHub API. This can also be set using the GITHUB_TOKEN environment variable.',
+    ).env('GITHUB_TOKEN'),
   )
   .addOption(
-    new Option('--app-installation-id <app_installation_id>', 'The installation ID of the GitHub App.')
-      .env('GITHUB_APP_INSTALLATION_ID')
+    new Option(
+      '--app-installation-id <app_installation_id>',
+      'The installation ID of the GitHub App.',
+    ).env('GITHUB_APP_INSTALLATION_ID'),
   )
   .addOption(
-    new Option('--app-id <app_id>', 'The App ID of the GitHub App')
-      .env('GITHUB_APP_ID')
+    new Option('--app-id <app_id>', 'The App ID of the GitHub App').env('GITHUB_APP_ID'),
   )
   .addOption(
-    new Option('--private-key <private_key>', 'The private key of the GitHub App. Alternatively, use --private-key-file if you have a .pem file. If this is provided, the app ID and installation ID must also be provided.')
-      .env('GITHUB_APP_PRIVATE_KEY')
-  ) 
+    new Option(
+      '--private-key <private_key>',
+      'The private key of the GitHub App. Alternatively, use --private-key-file if you have a .pem file. If this is provided, the app ID and installation ID must also be provided.',
+    ).env('GITHUB_APP_PRIVATE_KEY'),
+  )
   .addOption(
-    new Option('--private-key-file <private_key_file>', 'The private key of the GitHub App. For example, path to a *.pem file you downloaded from the about page of the GitHub App. If this is provided, the app ID and installation ID must also be provided.')
-      .env('GITHUB_APP_PRIVATE_KEY_FILE')
+    new Option(
+      '--private-key-file <private_key_file>',
+      'The private key of the GitHub App. For example, path to a *.pem file you downloaded from the about page of the GitHub App. If this is provided, the app ID and installation ID must also be provided.',
+    ).env('GITHUB_APP_PRIVATE_KEY_FILE'),
   )
   .option(
     '--base-url <base_url>',
@@ -149,14 +156,8 @@ command
   .option('--skip-update-check', 'Skip automatic check for updates to this tool', false)
   .action(
     actionRunner(async (opts: Arguments) => {
-      const {
-        baseUrl,
-        disableTelemetry,
-        inputPath,
-        proxyUrl,
-        skipUpdateCheck,
-        verbose,
-      } = opts;
+      const { baseUrl, disableTelemetry, inputPath, proxyUrl, skipUpdateCheck, verbose } =
+        opts;
 
       const logger = createLogger(verbose);
 

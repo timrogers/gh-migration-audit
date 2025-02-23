@@ -13,7 +13,12 @@ export const checkForUpdates = async (
   proxyUrl: string | undefined,
   logger: Logger,
 ): Promise<void> => {
-  const octokit = createOctokit({ auth: undefined }, 'https://api.github.com', proxyUrl, logger);
+  const octokit = createOctokit(
+    { auth: undefined },
+    'https://api.github.com',
+    proxyUrl,
+    logger,
+  );
 
   try {
     const { data: release } = await octokit.rest.repos.getLatestRelease({
