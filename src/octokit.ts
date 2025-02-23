@@ -41,8 +41,8 @@ export const createOctokit = (
     if (message.includes('https://gh.io/tag-protection-sunset')) return;
     logger.warn(message, meta);
   };
- 
-  const octokit = new OctokitWithPlugins({ 
+
+  const octokit = new OctokitWithPlugins({
     auth: authConfig.auth,
     authStrategy: authConfig.authStrategy,
     baseUrl,

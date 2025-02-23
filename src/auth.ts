@@ -11,7 +11,6 @@ export interface AuthConfig {
     | undefined;
 }
 
-
 const getAuthAppId = (appId?: string): number => {
   const authAppId = appId || process.env.GITHUB_APP_ID;
   if (!authAppId || isNaN(parseInt(authAppId))) {
@@ -92,10 +91,19 @@ export const createAuthConfig = ({
 }): AuthConfig => {
   try {
     if (appInstallationId || process.env.GITHUB_APP_INSTALLATION_ID) {
-      logger.info('GitHub App installation ID detected. Authenticating using GitHub App installation...');
-      return getInstallationAuthConfig(appId, privateKey, privateKeyFile, appInstallationId);
+      logger.info(
+        'GitHub App installation ID detected. Authenticating using GitHub App installation...',
+      );
+      return getInstallationAuthConfig(
+        appId,
+        privateKey,
+        privateKeyFile,
+        appInstallationId,
+      );
     } else {
-      logger.info('No GitHub App installation ID detected. Defaulting to authenticating using an access token...');
+      logger.info(
+        'No GitHub App installation ID detected. Defaulting to authenticating using an access token...',
+      );
       return getTokenAuthConfig(accessToken);
     }
   } catch (e) {

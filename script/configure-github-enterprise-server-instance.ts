@@ -244,7 +244,12 @@ const opts = program.opts() as {
     process.exit(1);
   }
 
-  const ghesOctokit = createOctokit({ auth: ghesAccessToken }, ghesBaseUrl, undefined, logger);
+  const ghesOctokit = createOctokit(
+    { auth: ghesAccessToken },
+    ghesBaseUrl,
+    undefined,
+    logger,
+  );
 
   const { isGitHubEnterpriseServer } = await getGitHubProductInformation(ghesOctokit);
 
