@@ -1,6 +1,6 @@
 import * as esbuild from 'esbuild'
 
-import packageJson from './package.json' assert { type: 'json' }
+import packageJson from './package.json' with { type: 'json' }
 
 const result = await esbuild.build({
   entryPoints: ['src/index.ts'],
