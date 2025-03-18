@@ -306,7 +306,7 @@ const opts = program.opts() as {
   logger.info('Configuring GitHub Actions and Dependabot secrets...');
 
   const dotcomOctokit = createOctokit(
-    dotcomAccessToken,
+    { auth: dotcomAccessToken },
     'https://api.github.com',
     undefined,
     logger,
