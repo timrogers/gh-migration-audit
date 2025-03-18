@@ -317,7 +317,7 @@ const opts = program.opts() as {
     owner: PROJECT_OWNER,
     repo: PROJECT_REPO,
     sodium,
-    secretName: `GHES_ACCESS_TOKEN`,
+    secretName: `GHES_TOKEN`,
     secretValue: ghesAccessToken,
   });
 
@@ -326,7 +326,7 @@ const opts = program.opts() as {
     owner: PROJECT_OWNER,
     repo: PROJECT_REPO,
     sodium,
-    secretName: `GHES_ACCESS_TOKEN`,
+    secretName: `GHES_TOKEN`,
     secretValue: ghesAccessToken,
   });
 
