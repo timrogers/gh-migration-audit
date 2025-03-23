@@ -1,4 +1,4 @@
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import prettier from "eslint-plugin-prettier";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
 import globals from "globals";
@@ -16,36 +16,39 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
-export default defineConfig([{
-    extends: compat.extends("prettier", "eslint:recommended", "plugin:@typescript-eslint/recommended"),
+export default defineConfig([
+    globalIgnores(['build.js', 'eslint.config.mjs', 'dist/']),
+    {
+        extends: compat.extends("prettier", "eslint:recommended", "plugin:@typescript-eslint/recommended"),
 
-    plugins: {
-        prettier,
-        "@typescript-eslint": typescriptEslint,
-    },
-
-    languageOptions: {
-        globals: {
-            ...globals.browser,
+        plugins: {
+            prettier,
+            "@typescript-eslint": typescriptEslint,
         },
 
-        parser: tsParser,
-        ecmaVersion: "latest",
-        sourceType: "module",
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+            },
 
-        parserOptions: {
-            project: "./tsconfig.json",
+            parser: tsParser,
+            ecmaVersion: "latest",
+            sourceType: "module",
+
+            parserOptions: {
+                project: "./tsconfig.json",
+            },
+        },
+
+        rules: {
+            "prettier/prettier": "error",
+            "@typescript-eslint/strict-boolean-expressions": "off",
+            "@typescript-eslint/no-unnecessary-type-assertion": "off",
+
+            "@typescript-eslint/ban-ts-comment": ["error", {
+                "ts-expect-error": "allow-with-description",
+                minimumDescriptionLength: 3,
+            }],
         },
     },
-
-    rules: {
-        "prettier/prettier": "error",
-        "@typescript-eslint/strict-boolean-expressions": "off",
-        "@typescript-eslint/no-unnecessary-type-assertion": "off",
-
-        "@typescript-eslint/ban-ts-comment": ["error", {
-            "ts-expect-error": "allow-with-description",
-            minimumDescriptionLength: 3,
-        }],
-    },
-}]);
+]);
