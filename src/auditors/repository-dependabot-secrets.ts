@@ -20,7 +20,6 @@ export const auditor = async ({
     });
 
     data = response.data;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error) {
     if (error instanceof RequestError && error.status == 500) {
       logger.warn(
